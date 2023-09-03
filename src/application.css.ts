@@ -1,20 +1,22 @@
-import { style as s } from "@vanilla-extract/css";
+import { style as s } from "@vanilla-extract/css"
 
-const square = s({
-    height: "100px",
-    width: "100px",
-    backgroundColor: "red",
+const toggleBtn = s({
+    position: "absolute",
+    top: '10px',
+    left: '10px',
+    zIndex: 1
 })
 
 const container = s({
+    minWidth: "100vw",
+    minHeight: "100vh",
+
+    position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    gap: "10px"
+    gap: "10px",
 })
 
-export {
-    container,
-    square
-}
+export { container, toggleBtn }
