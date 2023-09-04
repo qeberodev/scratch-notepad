@@ -1,10 +1,13 @@
 import { globalStyle, style as s } from "@vanilla-extract/css"
+import { backgroundBlur } from "../ui/styles.css"
 
 export const SIDE_PANEL_WIDTH = 330
 const container = s({
+    ...backgroundBlur,
+
     height: "100%",
     width: `${SIDE_PANEL_WIDTH}px`,
-    background: "#2D4356",
+    background: "#2D435677",
     zIndex: 2,
     position: "absolute",
     left: 0,

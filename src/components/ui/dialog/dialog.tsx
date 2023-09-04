@@ -1,7 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog"
-import { content, overlay } from "./dialog.css"
+import { close, content, description, overlay, title } from "./dialog.css"
 import { useTransition, animated, easings } from "@react-spring/web"
 import { PropsWithChildren } from "react"
+import { X } from "react-feather"
 
 type DialogContainerProps = {
     open?: boolean
@@ -9,22 +10,25 @@ type DialogContainerProps = {
 }
 function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
     const { onChange, open } = props
-    // const [open, setOpen] = useState(true)
+
     const transitions = useTransition(open, {
         from: {
-            opacity: 0,
+            overlayOpacity: 0,
             containerOpacity: 1,
             containerScale: 0.3,
+            filter: "blur(0px)",
         },
         enter: {
-            opacity: 1,
+            overlayOpacity: 0.7,
             containerOpacity: 1,
             containerScale: 1,
+            filter: "blur(0px)",
         },
         leave: {
-            opacity: 0,
+            overlayOpacity: 0,
             containerOpacity: 0,
             containerScale: 0.6,
+            filter: "blur(10px)",
         },
         config: {
             tension: 170,
@@ -36,33 +40,6 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
 
     return (
         <Dialog.Root onOpenChange={onChange} open={open}>
-            {/* <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-            <Dialog.Portal>
-                <Dialog.Overlay asChild>
-                    <animated.div
-                        className={overlay}
-                        style={{
-                            opacity,
-                        }}
-                    />
-                </Dialog.Overlay>
-                <Dialog.Content asChild>
-                    <animated.div
-                        className={content}
-                        style={{
-                            scale,
-                        }}
-                    >
-                        <Dialog.Title className={title}>
-                            Dialog Title
-                        </Dialog.Title>
-                        <Dialog.Description className={description}>
-                            Lorem ipsum dialog box.
-                        </Dialog.Description>
-                        <Dialog.Close>Close</Dialog.Close>
-                    </animated.div>
-                </Dialog.Content>
-            </Dialog.Portal> */}
             {transitions((styles, item) =>
                 item ? (
                     <>
@@ -70,7 +47,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                             <animated.div
                                 className={overlay}
                                 style={{
-                                    opacity: styles.opacity,
+                                    opacity: styles.overlayOpacity,
                                 }}
                             />
                         </Dialog.Overlay>
@@ -80,12 +57,23 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                 style={{
                                     scale: styles.containerScale,
                                     opacity: styles.containerOpacity,
+                                    filter: styles.filter,
                                 }}
                             >
-                                <Dialog.Close>close</Dialog.Close>
-                                <h1 style={{ color: "black" }}>
+                                <Dialog.Close className={close}>
+                                    <X color="white" />
+                                </Dialog.Close>
+                                <Dialog.Title className={title}>
+                                    Title Goes Here
+                                </Dialog.Title>
+                                <Dialog.Description className={description}>
+                                    Description goes here.
+                                </Dialog.Description>
+                                {/* Content Below */}
+
+                                <section style={{ color: "black" }}>
                                     Hello from inside the Dialog!
-                                </h1>
+                                </section>
                             </animated.div>
                         </Dialog.Content>
                     </>

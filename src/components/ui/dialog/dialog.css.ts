@@ -1,23 +1,21 @@
 import { style as s } from "@vanilla-extract/css"
 import { LAYER_LEVEL } from "../common"
 
-const container = s({})
-
 const overlay = s({
-    backgroundColor: "gray",
+    backgroundColor: "#0006",
     position: "fixed",
     inset: 0,
     zIndex: LAYER_LEVEL.LEVEL_2,
+    backdropFilter: "blur(3px)",
 })
 
 const content = s({
+    textAlign: "left",
     backgroundColor: "white",
     borderRadius: "6px",
     boxShadow:
         "hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px",
     position: "fixed",
-    // top: "50%",
-    // left: "50%",
     transform: "translate(-50%, -50%)",
     width: "90vw",
     maxWidth: "450px",
@@ -26,7 +24,7 @@ const content = s({
     ":focus": {
         outline: "none",
     },
-    zIndex: LAYER_LEVEL.LEVEL_3
+    zIndex: LAYER_LEVEL.LEVEL_3,
 })
 
 const title = s({
@@ -43,4 +41,11 @@ const description = s({
     lineHeight: "1.5",
 })
 
-export { container, description, overlay, title, content }
+const close = s({
+    marginLeft: "auto",
+    display: "flex",
+    padding: "2px",
+    borderRadius: "50%",
+})
+
+export { description, overlay, title, content, close }
