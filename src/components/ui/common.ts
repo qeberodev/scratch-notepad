@@ -5,5 +5,8 @@ export enum LAYER_LEVEL {
     LEVEL_4 = 4,
 }
 
-const _variants = ["primary", "secondary", "tertiary"] as const
-export type Variant = (typeof _variants)[number]
+const _color_variants = ["primary", "secondary", "tertiary"] as const
+export type ColorVariant = (typeof _color_variants)[number]
+
+const _size_variants = ["large", "medium"] as const
+export type SizeVariant = (typeof _size_variants)[number]

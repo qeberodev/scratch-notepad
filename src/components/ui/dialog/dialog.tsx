@@ -4,19 +4,22 @@ import { PropsWithChildren } from "react"
 import { X } from "react-feather"
 import { Button } from "../button/button"
 import { content, overlay } from "./dialog.css"
+import { SizeVariant } from "../common"
+import clsx from "clsx"
 
 type DialogContainerProps = {
     open?: boolean
     onChange?: (open: boolean) => void
+    variant: SizeVariant
 }
 function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
-    const { onChange, open } = props
+    const { onChange, open, variant } = props
 
     const transitions = useTransition(open, {
         from: {
             overlayOpacity: 0,
             containerOpacity: 1,
-            containerScale: 0.3,
+            containerScale: 0.6,
             filter: "blur(0px)",
         },
         enter: {
@@ -36,6 +39,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
             friction: 14,
             bounce: 0,
             easing: easings.easeInOutCirc,
+            duration: 120,
         },
     })
 
@@ -46,7 +50,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                     <>
                         <Dialog.Overlay forceMount asChild>
                             <animated.div
-                                className={overlay}
+                                className={clsx(overlay)}
                                 style={{
                                     opacity: styles.overlayOpacity,
                                 }}
@@ -58,7 +62,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                             style={{ transform: "translate(-50%, -50%)" }}
                         >
                             <animated.div
-                                className={content}
+                                className={content({ variant })}
                                 style={{
                                     scale: styles.containerScale,
                                     opacity: styles.containerOpacity,

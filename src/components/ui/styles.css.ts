@@ -1,18 +1,18 @@
 import { CSSProperties, createTheme } from "@vanilla-extract/css"
-import { Variant } from "./common"
+import { ColorVariant } from "./common"
 
 export const backgroundBlur: CSSProperties = {
     backdropFilter: "blur(10px)",
 }
 
-export const COLOR: Record<Variant, string> = {
+export const COLOR: Record<ColorVariant, string> = {
     primary: "#e7e7e7",
     secondary: "#262724",
     tertiary: "#ff6025",
 }
 
 type ThemeTokens = {
-    color: Record<Variant, string>
+    color: Record<ColorVariant, string>
     background: string
     fontFamily: string
 }
