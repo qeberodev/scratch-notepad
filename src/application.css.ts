@@ -8,15 +8,7 @@ const toggleBtn = s({
 })
 
 const container = s({
-    minWidth: "100vw",
-    minHeight: "100vh",
-
     position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
 })
 
 export { container, toggleBtn }

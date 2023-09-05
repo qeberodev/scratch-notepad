@@ -1,31 +1,68 @@
 import { useState } from "react"
 import "./App.css"
-import { container, toggleBtn } from "./application.css"
-import { SidePanel } from "./components/side-panel"
+import { container } from "./application.css"
 import { DialogContainer } from "./components/ui/dialog"
+import { Button } from "./components/ui/button/button"
+import { Plus, Search } from "react-feather"
+import { COLOR } from "./components/ui/styles.css"
+import { SearchBar } from "./components/search-bar"
 
 function App() {
-    const [open, setOpen] = useState(false)
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [searchOpen, setSearchOpen] = useState(false)
+    const [entry, setEntry] = useState("")
 
     return (
-        <div className={container}>
-            <SidePanel open={open} onClose={setOpen} />
+        <main className={container}>
             <DialogContainer open={dialogOpen} onChange={setDialogOpen} />
 
-            <button className={toggleBtn} onClick={() => setOpen(!open)}>
-                Toggle
-            </button>
-            <button
-                className={toggleBtn}
-                onClick={() => setDialogOpen(true)}
-                style={{
-                    top: "60px",
-                }}
-            >
-                Open Dialog
-            </button>
-        </div>
+            <section>
+                <div
+                    style={{
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "8px",
+                    }}
+                >
+                    <span
+                        style={{
+                            position: "absolute",
+                            left: 0,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                        }}
+                    >
+                        <Button
+                            onClick={() => setDialogOpen(true)}
+                            style={{
+                                top: "60px",
+                            }}
+                        >
+                            <Plus color={"#ff6025"} />
+                        </Button>
+                    </span>
+
+                    <span>Home</span>
+
+                    <span
+                        style={{
+                            position: "absolute",
+                            right: 0,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                        }}
+                    >
+                        <SearchBar
+                            value={entry}
+                            onChange={(e) => setEntry(e.currentTarget.value)}
+                            onClose={() => setEntry("")}
+                        />
+                    </span>
+                </div>
+            </section>
+        </main>
     )
 }
 

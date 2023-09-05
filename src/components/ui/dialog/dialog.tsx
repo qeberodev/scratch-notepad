@@ -1,8 +1,9 @@
 import * as Dialog from "@radix-ui/react-dialog"
-import { close, content, description, overlay, title } from "./dialog.css"
-import { useTransition, animated, easings } from "@react-spring/web"
+import { animated, easings, useTransition } from "@react-spring/web"
 import { PropsWithChildren } from "react"
 import { X } from "react-feather"
+import { Button } from "../button/button"
+import { content, overlay } from "./dialog.css"
 
 type DialogContainerProps = {
     open?: boolean
@@ -19,7 +20,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
             filter: "blur(0px)",
         },
         enter: {
-            overlayOpacity: 0.7,
+            overlayOpacity: 0.8,
             containerOpacity: 1,
             containerScale: 1,
             filter: "blur(0px)",
@@ -27,13 +28,13 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
         leave: {
             overlayOpacity: 0,
             containerOpacity: 0,
-            containerScale: 0.6,
+            containerScale: 0.8,
             filter: "blur(10px)",
         },
         config: {
             tension: 170,
             friction: 14,
-            bounce: 0.3,
+            bounce: 0,
             easing: easings.easeInOutCirc,
         },
     })
@@ -51,7 +52,11 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                 }}
                             />
                         </Dialog.Overlay>
-                        <Dialog.Content forceMount asChild>
+                        <Dialog.Content
+                            forceMount
+                            asChild
+                            style={{ transform: "translate(-50%, -50%)" }}
+                        >
                             <animated.div
                                 className={content}
                                 style={{
@@ -60,15 +65,11 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                     filter: styles.filter,
                                 }}
                             >
-                                <Dialog.Close className={close}>
-                                    <X color="white" />
+                                <Dialog.Close asChild>
+                                    <Button style={{ margin: "0 0 0 auto" }}>
+                                        <X color="white" />
+                                    </Button>
                                 </Dialog.Close>
-                                <Dialog.Title className={title}>
-                                    Title Goes Here
-                                </Dialog.Title>
-                                <Dialog.Description className={description}>
-                                    Description goes here.
-                                </Dialog.Description>
                                 {/* Content Below */}
 
                                 <section style={{ color: "black" }}>

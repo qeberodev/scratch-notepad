@@ -2,25 +2,25 @@ import { style as s } from "@vanilla-extract/css"
 import { LAYER_LEVEL } from "../common"
 
 const overlay = s({
-    backgroundColor: "#0006",
+    backgroundColor: "#000a",
     position: "fixed",
     inset: 0,
     zIndex: LAYER_LEVEL.LEVEL_2,
-    backdropFilter: "blur(3px)",
 })
 
 const content = s({
     textAlign: "left",
     backgroundColor: "white",
-    borderRadius: "6px",
+    borderRadius: "4px",
     boxShadow:
         "hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px",
     position: "fixed",
-    transform: "translate(-50%, -50%)",
+    top: "50%",
+    left: "50%",
     width: "90vw",
     maxWidth: "450px",
     maxHeight: "85vh",
-    padding: "25px",
+    padding: "10px",
     ":focus": {
         outline: "none",
     },

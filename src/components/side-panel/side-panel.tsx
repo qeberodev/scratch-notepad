@@ -1,20 +1,7 @@
 import { animated, useSpring } from "@react-spring/web"
-import { container, row, SIDE_PANEL_WIDTH, closeBtn } from "./side-panel.css"
+import { container, row, SIDE_PANEL_WIDTH } from "./side-panel.css"
 import { X } from "react-feather"
-import { PropsWithChildren } from "react"
-
-function CloseBtn(props: PropsWithChildren<{ onClick: () => void }>) {
-    return (
-        <animated.button
-            onClick={props.onClick}
-            className={closeBtn}
-            title={"close side panel"}
-            type={"button"}
-        >
-            <X color="white" />
-        </animated.button>
-    )
-}
+import { Button } from "../ui/button/button"
 
 export type SidePanelProps = {
     open?: boolean
@@ -29,7 +16,19 @@ export function SidePanel(props: React.PropsWithChildren<SidePanelProps>) {
     return (
         <animated.div style={springs} className={container}>
             <section className={row} style={{ flexDirection: "row-reverse" }}>
-                <CloseBtn onClick={() => onClose && onClose(!open)} />
+                <Button
+                    onClick={() => onClose && onClose(!open)}
+                    style={{
+                        borderRadius: "50%",
+                        padding: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                    title={"close side panel"}
+                >
+                    <X color="white" />
+                </Button>
             </section>
         </animated.div>
     )
