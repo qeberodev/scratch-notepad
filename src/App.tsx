@@ -1,20 +1,18 @@
 import { useState } from "react"
 import "./App.css"
 import { container } from "./application.css"
-import { DialogContainer } from "./components/ui/dialog"
 import { Button } from "./components/ui/button/button"
-import { Plus, Search } from "react-feather"
-import { COLOR } from "./components/ui/styles.css"
+import { Plus } from "react-feather"
 import { SearchBar } from "./components/search-bar"
+import { Editor } from "./components/editor/editor"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
-    const [searchOpen, setSearchOpen] = useState(false)
     const [entry, setEntry] = useState("")
 
     return (
         <main className={container}>
-            <DialogContainer open={dialogOpen} onChange={setDialogOpen} />
+            <Editor open={dialogOpen} onChange={setDialogOpen} />
 
             <section>
                 <div

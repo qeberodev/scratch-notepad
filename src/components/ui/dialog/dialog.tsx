@@ -7,13 +7,15 @@ import { content, overlay } from "./dialog.css"
 import { SizeVariant } from "../common"
 import clsx from "clsx"
 
-type DialogContainerProps = {
+export type DialogContainerProps = {
     open?: boolean
     onChange?: (open: boolean) => void
-    variant: SizeVariant
+    variant?: SizeVariant
+    className?: string
 }
 function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
-    const { onChange, open, variant } = props
+    const { onChange, open, children, className } = props
+    const variant = props.variant ?? "large"
 
     const transitions = useTransition(open, {
         from: {
@@ -62,7 +64,9 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                             style={{ transform: "translate(-50%, -50%)" }}
                         >
                             <animated.div
-                                className={content({ variant })}
+                                className={clsx(content({ variant }), {
+                                    [`${className}`]: className,
+                                })}
                                 style={{
                                     scale: styles.containerScale,
                                     opacity: styles.containerOpacity,
@@ -76,9 +80,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                 </Dialog.Close>
                                 {/* Content Below */}
 
-                                <section style={{ color: "black" }}>
-                                    Hello from inside the Dialog!
-                                </section>
+                                <section>{children}</section>
                             </animated.div>
                         </Dialog.Content>
                     </>
