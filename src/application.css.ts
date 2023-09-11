@@ -9,6 +9,9 @@ const toggleBtn = s({
 
 const container = s({
     position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px"
 })
 
 export { container, toggleBtn }

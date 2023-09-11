@@ -10,7 +10,7 @@ const container = s({
     borderRadius: "4px",
     border: "none",
     padding: 0,
-    margin: "8px",
+    margin: 0,
 
     minWidth: `${BUTTON_SIZE}px`,
     minHeight: `${BUTTON_SIZE}px`,

@@ -41,3 +41,8 @@ export const Theme = {
     Light: lightVars,
     Dark: darkVars,
 }
+
+export const FONT = {
+    serif: "Nunito, sans-serif",
+    sanSerif: "DM Serif Display, serif",
+}

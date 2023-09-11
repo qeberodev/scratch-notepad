@@ -5,14 +5,17 @@ import { Button } from "./components/ui/button/button"
 import { Plus } from "react-feather"
 import { SearchBar } from "./components/search-bar"
 import { Editor } from "./components/editor/editor"
+import { useNotes } from "./model/note"
+import { Note } from "./components/note/note"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [entry, setEntry] = useState("")
+    const notes = useNotes((state) => state.notes)
 
     return (
         <main className={container}>
-            <Editor open={dialogOpen} onChange={setDialogOpen} />
+            <Editor type="buffer" open={dialogOpen} onChange={setDialogOpen} />
 
             <section>
                 <div
@@ -59,6 +62,12 @@ function App() {
                         />
                     </span>
                 </div>
+            </section>
+
+            <section>
+                {Object.entries(notes).map(([id, note]) => (
+                    <Note key={id} note={note} />
+                ))}
             </section>
         </main>
     )

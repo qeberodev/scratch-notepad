@@ -12,29 +12,28 @@ export type DialogContainerProps = {
     onChange?: (open: boolean) => void
     variant?: SizeVariant
     className?: string
+    closeBtn?: boolean
 }
 function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
     const { onChange, open, children, className } = props
     const variant = props.variant ?? "large"
+    const closeBtn = props.closeBtn ?? true
 
     const transitions = useTransition(open, {
         from: {
             overlayOpacity: 0,
             containerOpacity: 1,
             containerScale: 0.6,
-            filter: "blur(0px)",
         },
         enter: {
             overlayOpacity: 0.8,
             containerOpacity: 1,
             containerScale: 1,
-            filter: "blur(0px)",
         },
         leave: {
             overlayOpacity: 0,
             containerOpacity: 0,
             containerScale: 0.8,
-            filter: "blur(10px)",
         },
         config: {
             tension: 170,
@@ -70,14 +69,17 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                 style={{
                                     scale: styles.containerScale,
                                     opacity: styles.containerOpacity,
-                                    filter: styles.filter,
                                 }}
                             >
-                                <Dialog.Close asChild>
-                                    <Button style={{ margin: "0 0 0 auto" }}>
-                                        <X color="white" />
-                                    </Button>
-                                </Dialog.Close>
+                                {closeBtn && (
+                                    <Dialog.Close asChild>
+                                        <Button
+                                            style={{ margin: "0 0 0 auto" }}
+                                        >
+                                            <X color="white" />
+                                        </Button>
+                                    </Dialog.Close>
+                                )}
                                 {/* Content Below */}
 
                                 <section>{children}</section>
