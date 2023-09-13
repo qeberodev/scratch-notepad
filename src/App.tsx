@@ -6,16 +6,41 @@ import { Plus } from "react-feather"
 import { SearchBar } from "./components/search-bar"
 import { Editor } from "./components/editor/editor"
 import { useNotes } from "./model/note"
-import { Note } from "./components/note/note"
+import { NoteCard } from "./components/note/note"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [entry, setEntry] = useState("")
-    const notes = useNotes((state) => state.notes)
+    const [selectedNote, setSelectedNote] = useState<string>()
+    const [getNotes, deleteNote, archiveNote] = useNotes((state) => [
+        state.getNotes,
+        state.delete,
+        state.archive,
+    ])
+
+    const createNote = () => {
+        setSelectedNote(undefined)
+        setDialogOpen(true)
+    }
+
+    const handleOpen = (id: string) => {
+        setSelectedNote(id)
+        setDialogOpen(true)
+    }
+    const handleDelete = (id: string) => {
+        deleteNote(id)
+    }
+    const handleArchive = (id: string) => {
+        archiveNote(id, true)
+    }
 
     return (
         <main className={container}>
-            <Editor type="buffer" open={dialogOpen} onChange={setDialogOpen} />
+            <Editor
+                selectedNote={selectedNote}
+                open={dialogOpen}
+                onChange={setDialogOpen}
+            />
 
             <section>
                 <div
@@ -36,7 +61,7 @@ function App() {
                         }}
                     >
                         <Button
-                            onClick={() => setDialogOpen(true)}
+                            onClick={createNote}
                             style={{
                                 top: "60px",
                             }}
@@ -65,8 +90,14 @@ function App() {
             </section>
 
             <section>
-                {Object.entries(notes).map(([id, note]) => (
-                    <Note key={id} note={note} />
+                {getNotes('not-archived').map((note) => (
+                    <NoteCard
+                        key={note.id}
+                        note={note}
+                        onOpen={handleOpen}
+                        onDelete={handleDelete}
+                        onArchive={handleArchive}
+                    />
                 ))}
             </section>
         </main>

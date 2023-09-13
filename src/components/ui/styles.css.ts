@@ -43,6 +43,6 @@ export const Theme = {
 }
 
 export const FONT = {
-    serif: "Nunito, sans-serif",
-    sanSerif: "DM Serif Display, serif",
+    sanSerif: "Nunito, sans-serif",
+    serif: "DM Serif Display, serif",
 }

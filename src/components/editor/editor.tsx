@@ -1,6 +1,12 @@
 import EditorJS, { OutputData } from "@editorjs/editorjs"
 import { DialogContainer, DialogContainerProps } from "../ui/dialog"
-import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
+import {
+    PropsWithChildren,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+} from "react"
 import { tools } from "./editor-tools"
 import { container, dialog } from "./editor.css"
 import { Button } from "../ui/button/button"
@@ -8,7 +14,7 @@ import { Save, X, RotateCcw } from "react-feather"
 import { useNotes } from "../../model/note"
 
 type EditorProps = DialogContainerProps & {
-    type: "buffer" | "saved"
+    selectedNote?: string
 }
 
 const defaultData: OutputData = {
@@ -25,24 +31,43 @@ const defaultData: OutputData = {
 
 const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
-    const { ...rest } = props
-    const { save } = useNotes()
+    const { selectedNote, ...rest } = props
+    const { save, get, notes } = useNotes()
+    const notesAvailable = useMemo(
+        () => Object.keys(notes).length !== 0,
+        [notes],
+    )
 
     const instance = useRef<EditorJS | null>(null)
     const initEditor = useCallback(() => {
         if (!props.open) return
 
+        let data: OutputData
+        if (!selectedNote) {
+            if (!notesAvailable) {
+                data = defaultData
+            } else {
+                data = {
+                    blocks: [],
+                }
+            }
+        } else {
+            const fetchedNote = get(selectedNote)
+            data = fetchedNote ?? defaultData
+        }
+
         const editor = new EditorJS({
+            data,
             holder: EDITOR_HOLDER_ID,
-            data: defaultData,
-            autofocus: true,
+            autofocus: false,
             hideToolbar: false,
             tools: tools,
             onReady: () => {
                 instance.current = editor
             },
+            placeholder: "Start Typing Here 🖊️...",
         })
-    }, [props.open])
+    }, [get, notesAvailable, props.open, selectedNote])
 
     // This will run only once
     useEffect(() => {
@@ -62,11 +87,24 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             const note = await instance.current?.save()
 
             if (!note) return
-            save(note)
+            if (note.blocks.length === 0) return
+
+            save({ ...note, id: selectedNote })
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }
-    }, [instance, save])
+    }, [save, selectedNote])
+
+    // const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (e) => {
+    //     const { metaKey, key } = e
+    //     const isEnter = key === "Enter"
+
+    //     if (metaKey && isEnter) {
+    //         e.preventDefault()
+    //         e.stopPropagation()
+    //         saveNote()
+    //     }
+    // }
 
     return (
         <DialogContainer closeBtn={false} className={dialog} {...rest}>
@@ -98,7 +136,13 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                     icon={<RotateCcw color="white" />}
                 />
             </div>
-            {props.open && <div id={EDITOR_HOLDER_ID} className={container} />}
+            {props.open && (
+                <div
+                    // onKeyDown={handleKeyDown}
+                    id={EDITOR_HOLDER_ID}
+                    className={container}
+                />
+            )}
         </DialogContainer>
     )
 }
