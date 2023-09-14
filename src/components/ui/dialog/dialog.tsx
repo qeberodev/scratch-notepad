@@ -1,11 +1,12 @@
 import * as Dialog from "@radix-ui/react-dialog"
-import { animated, easings, useTransition } from "@react-spring/web"
+import { animated, useTransition } from "@react-spring/web"
 import { PropsWithChildren } from "react"
 import { X } from "react-feather"
 import { Button } from "../button/button"
 import { content, overlay } from "./dialog.css"
 import { SizeVariant } from "../common"
 import clsx from "clsx"
+import { animationConfig } from "../../../animations"
 
 export type DialogContainerProps = {
     open?: boolean
@@ -35,13 +36,7 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
             containerOpacity: 0,
             containerScale: 0.8,
         },
-        config: {
-            tension: 170,
-            friction: 14,
-            bounce: 0,
-            easing: easings.easeInOutCirc,
-            duration: 120,
-        },
+        config: animationConfig,
     })
 
     return (

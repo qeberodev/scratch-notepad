@@ -1,17 +1,16 @@
 import { globalStyle, style as s } from "@vanilla-extract/css"
-import { backgroundBlur } from "../ui/styles.css"
+import { COLOR } from "../ui/styles.css"
 
-export const SIDE_PANEL_WIDTH = 330
+export const SIDE_PANEL_WIDTH = 430
 const container = s({
-    ...backgroundBlur,
-
     height: "100%",
     width: `${SIDE_PANEL_WIDTH}px`,
-    background: "#2D435677",
+    background: COLOR.primary,
     zIndex: 2,
     position: "absolute",
-    left: 0,
+    right: 0,
     top: 0,
+    borderLeft: `3px solid ${COLOR.secondary}33`,
 
     // layout
     display: "flex",

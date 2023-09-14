@@ -1,6 +1,7 @@
-import { globalStyle, fontFace } from "@vanilla-extract/css"
+import { globalStyle } from "@vanilla-extract/css"
+import { FONT } from "./components/ui/styles.css.ts"
 
 globalStyle("html, body", {
     margin: 0,
-    fontFamily: "Arial",
+    fontFamily: FONT.sanSerif,
 })

@@ -7,6 +7,7 @@ export const container = s({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 4
 })
 
 export const inputBox = s({

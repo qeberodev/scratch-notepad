@@ -2,15 +2,18 @@ import { animated, useSpring } from "@react-spring/web"
 import { container, row, SIDE_PANEL_WIDTH } from "./side-panel.css"
 import { X } from "react-feather"
 import { Button } from "../ui/button/button"
+import { PropsWithChildren } from "react"
+import { animationConfig } from "../../animations"
 
 export type SidePanelProps = {
     open?: boolean
     onClose?: (state: boolean) => void
 }
-export function SidePanel(props: React.PropsWithChildren<SidePanelProps>) {
-    const { open, onClose } = props
+export function SidePanel(props: PropsWithChildren<SidePanelProps>) {
+    const { open, onClose, children } = props
     const springs = useSpring({
-        x: open ? 0 : -1 * SIDE_PANEL_WIDTH,
+        x: open ? 0 : SIDE_PANEL_WIDTH,
+        config: animationConfig,
     })
 
     return (
@@ -30,6 +33,8 @@ export function SidePanel(props: React.PropsWithChildren<SidePanelProps>) {
                     <X color="white" />
                 </Button>
             </section>
+
+            <section>{children}</section>
         </animated.div>
     )
 }

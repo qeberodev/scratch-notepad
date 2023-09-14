@@ -42,7 +42,7 @@ export const useNotes = create(
                         }
                         case "not-archived": {
                             const filtered = notes.filter(
-                                (note) => note.archived === false,
+                                (note) => !note.archived,
                             )
 
                             return filtered

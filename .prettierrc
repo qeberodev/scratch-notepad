@@ -1,4 +1,6 @@
 {
-    editorConfig: true,
-    semi: false
+    "editorConfig": true,
+    "semi": false,
+    "tabWidth": 4,
+    "useTabs": false
 }
