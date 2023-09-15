@@ -1,16 +1,16 @@
 import { globalStyle, style as s } from "@vanilla-extract/css"
-import { COLOR } from "../ui/styles.css"
+import { themeVars } from "../ui/styles.css"
 
 export const SIDE_PANEL_WIDTH = 430
 const container = s({
     height: "100%",
     width: `${SIDE_PANEL_WIDTH}px`,
-    background: COLOR.primary,
+    background: themeVars.color.primary,
     zIndex: 2,
     position: "absolute",
     right: 0,
     top: 0,
-    borderLeft: `3px solid ${COLOR.secondary}33`,
+    borderLeft: `2px solid ${themeVars.background.secondary}`,
 
     // layout
     display: "flex",

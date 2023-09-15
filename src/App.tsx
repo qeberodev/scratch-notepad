@@ -7,11 +7,12 @@ import { SearchBar } from "./components/search-bar"
 import { Editor } from "./components/editor/editor"
 import { useNotes } from "./model/note"
 import { NoteCard } from "./components/note/note"
-import { COLOR } from "./components/ui/styles.css"
 import { SidePanel } from "./components/side-panel"
 import { SettingsPanel } from "./components/settings-panel"
 import { ArchivedButton } from "./components/archived-button/archived-button"
 import { Page } from "./components/settings-panel"
+import { useTheme } from "./hooks/use-theme"
+import { themeVars } from "./components/ui/styles.css"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -25,6 +26,7 @@ function App() {
         state.archive,
     ])
     const [settingsPage, setSettingsPage] = useState<Page>("home")
+    const { vars } = useTheme()
 
     const archivedCount = useMemo(() => {
         return getNotes("archived").length
@@ -48,7 +50,7 @@ function App() {
     }
 
     return (
-        <>
+        <div style={vars}>
             <SidePanel
                 open={sidePanelOpen}
                 onClose={(state) => {
@@ -93,7 +95,7 @@ function App() {
                                     top: "60px",
                                 }}
                             >
-                                <Plus color={"#ff6025"} />
+                                <Plus color={themeVars.color.tertiary} />
                             </Button>
                         </span>
 
@@ -112,7 +114,7 @@ function App() {
                             }}
                         >
                             <Button
-                                icon={<Settings color={COLOR.primary} />}
+                                icon={<Settings color={themeVars.color.primary} />}
                                 onClick={() => setSidePanelOpen(true)}
                             />
                             <ArchivedButton count={archivedCount} />
@@ -139,7 +141,7 @@ function App() {
                     ))}
                 </section>
             </main>
-        </>
+        </div>
     )
 }
 

@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode, useCallback, useMemo } from "react"
 import { Home, Info, Lock, Settings } from "react-feather"
-import { COLOR } from "../ui/styles.css"
+import { themeVars } from "../ui/styles.css"
 import { HomePage, GeneralPage } from "./pages"
 
 export const pages = ["home", "general", "privacy", "about"] as const
@@ -13,19 +13,19 @@ type SettingsPanelProps = {
 export const pagesList: Record<Page, { title: string; icon: ReactNode }> = {
     about: {
         title: "About",
-        icon: <Info color={COLOR.primary} />,
+        icon: <Info color={themeVars.color.primary} />,
     },
     general: {
         title: "General",
-        icon: <Settings color={COLOR.secondary} />,
+        icon: <Settings color={themeVars.color.secondary} />,
     },
     privacy: {
         title: "Privacy",
-        icon: <Lock color={COLOR.secondary} />,
+        icon: <Lock color={themeVars.color.secondary} />,
     },
     home: {
         title: "Home",
-        icon: <Home color={COLOR.secondary} />,
+        icon: <Home color={themeVars.color.secondary} />,
     },
 }
 

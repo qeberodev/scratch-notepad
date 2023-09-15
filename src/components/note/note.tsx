@@ -2,8 +2,8 @@ import { PropsWithChildren, ReactNode, useCallback, useMemo } from "react"
 import { container, block as blockStyle, blocksContainer } from "./note.css"
 import { Button } from "../ui/button/button"
 import { Maximize2, Trash, Archive } from "react-feather"
-import { COLOR } from "../ui/styles.css"
 import type { Note } from "../../model/note"
+import { themeVars } from "../ui/styles.css"
 
 type NoteAction = {
     icon: ReactNode
@@ -59,15 +59,15 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
     const noteActions: NoteAction[] = useMemo(
         () => [
             {
-                icon: <Maximize2 color={COLOR.secondary} />,
+                icon: <Maximize2 color={themeVars.color.secondary} />,
                 action: handleOpen,
             },
             {
-                icon: <Trash color={COLOR.secondary} />,
+                icon: <Trash color={themeVars.color.secondary} />,
                 action: handleDelete,
             },
             {
-                icon: <Archive color={COLOR.secondary} />,
+                icon: <Archive color={themeVars.color.secondary} />,
                 action: handleArchive,
             },
         ],
@@ -93,7 +93,7 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                     display: "flex",
                     gap: "4px",
                     flexDirection: "row-reverse",
-                    borderTop: `1px dashed ${COLOR.secondary}33`,
+                    borderTop: `1px dashed ${themeVars.color.secondary}33`,
                     marginTop: "16px",
                     paddingTop: "4px",
                 }}

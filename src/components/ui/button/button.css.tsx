@@ -1,12 +1,12 @@
 import { globalStyle, style as s } from "@vanilla-extract/css"
-import { COLOR } from "../../ui/styles.css"
+import { themeVars } from "../../ui/styles.css"
 
 export const BUTTON_SIZE = 32
 export const ICON_SIZE = BUTTON_SIZE - 16
 
 const container = s({
     backgroundColor: "transparent",
-    color: COLOR.secondary,
+    color: themeVars.color.secondary,
     borderRadius: "4px",
     border: "none",
     padding: 0,
@@ -18,17 +18,17 @@ const container = s({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    
+
     ":hover": {
         cursor: "pointer",
-        backgroundColor: `${COLOR.secondary}11`
+        backgroundColor: themeVars.background.secondary
     },
 })
 globalStyle(`${container} > svg`, {
     width: `${ICON_SIZE}px`,
     height: `${ICON_SIZE}px`,
-    stroke: COLOR.secondary,
-    strokeWidth: "3px"
+    stroke: themeVars.color.secondary,
+    strokeWidth: "3px",
 })
 
 export { container }

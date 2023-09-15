@@ -1,9 +1,9 @@
 import { globalStyle, style as s } from "@vanilla-extract/css"
-import { COLOR, FONT } from "../ui/styles.css"
+import { FONT, themeVars } from "../ui/styles.css"
 
 export const container = s({
-    background: COLOR.primary,
-    color: COLOR.secondary,
+    background: themeVars.color.primary,
+    color: themeVars.color.secondary,
     padding: ".5em",
     width: "18em",
     minHeight: "3em",
