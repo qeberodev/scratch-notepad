@@ -2,7 +2,7 @@ import { ComponentProps, PropsWithChildren, useCallback, useState } from "react"
 import { Button } from "../ui/button/button"
 import { container, inputBox } from "./search-bar.css"
 import { Search, X } from "react-feather"
-import { COLOR } from "../ui/styles.css"
+import { themeVars } from "../ui/styles.css"
 
 export type SearchBarProps = {
     onClose?: () => void
@@ -46,17 +46,17 @@ export function SearchBar(props: PropsWithChildren<SearchBarProps>) {
                             borderTopLeftRadius: 0,
                             borderBottomLeftRadius: 0,
                             margin: 0,
-                            backgroundColor: `${COLOR.secondary}11`,
+                            backgroundColor: `${themeVars.color.secondary}11`,
                         }}
                         onClick={handleClosing}
                     >
-                        <X color={COLOR.secondary} />
+                        <X color={themeVars.color.secondary} />
                     </Button>
                 </span>
             )}
 
             <Button onClick={onSearch}>
-                <Search color={COLOR.secondary} />
+                <Search color={themeVars.color.secondary} />
             </Button>
         </span>
     )

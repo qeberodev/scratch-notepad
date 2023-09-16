@@ -1,6 +1,6 @@
 import { style as s } from "@vanilla-extract/css"
-import { COLOR } from "../ui/styles.css"
 import { BUTTON_SIZE } from "../ui/button/button.css"
+import { themeVars } from "../ui/styles.css"
 
 export const container = s({
     display: "flex",
@@ -11,7 +11,7 @@ export const container = s({
 })
 
 export const inputBox = s({
-    background: `${COLOR.secondary}11`,
+    background: themeVars.color.primary,
     border: "none",
     borderRadius: 4,
     borderTopRightRadius: 0,

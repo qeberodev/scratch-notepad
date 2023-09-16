@@ -1,45 +1,58 @@
 import { CSSProperties, createTheme } from "@vanilla-extract/css"
 import { ColorVariant } from "./common"
+import { Theme } from "../../model/settings"
 
 export const backgroundBlur: CSSProperties = {
     backdropFilter: "blur(10px)",
 }
 
-export const COLOR: Record<ColorVariant, string> = {
-    primary: "#e7e7e7",
-    secondary: "#262724",
-    tertiary: "#ff6025",
-}
-
 type ThemeTokens = {
     color: Record<ColorVariant, string>
-    background: string
+    background: Record<ColorVariant, string>
     fontFamily: string
 }
 
-export const [darkClass, darkVars] = createTheme<ThemeTokens>({
-    color: {
-        primary: "#f7f7f7",
-        secondary: "#ff6025",
-        tertiary: "#262724",
+export const [, themeVars] = createTheme<ThemeTokens>({
+    background: {
+        primary: "",
+        secondary: "",
+        tertiary: "",
     },
-    background: "#ffffff",
-    fontFamily: "helvetica",
+    color: {
+        primary: "",
+        secondary: "",
+        tertiary: "",
+    },
+    fontFamily: "",
 })
 
-export const [lightClass, lightVars] = createTheme<ThemeTokens>({
-    color: {
-        primary: "#f7f7f7",
-        secondary: "#ff6025",
-        tertiary: "#262724",
+export const configs: Record<Theme, ThemeTokens> = {
+    dark: {
+        background: {
+            primary: "#f7f7f733",
+            tertiary: "#ff602533",
+            secondary: "#26272422",
+        },
+        color: {
+            primary: "#f7f7f7",
+            tertiary: "#ff6025",
+            secondary: "#262724",
+        },
+        fontFamily: "helvetica",
     },
-    background: "#ffffff",
-    fontFamily: "helvetica",
-})
-
-export const Theme = {
-    Light: lightVars,
-    Dark: darkVars,
+    light: {
+        color: {
+            primary: "#f7f7f7",
+            secondary: "#ff6025",
+            tertiary: "#262724",
+        },
+        background: {
+            primary: "#f7f7f733",
+            secondary: "#ff602533",
+            tertiary: "#26272433",
+        },
+        fontFamily: "helvetica",
+    },
 }
 
 export const FONT = {

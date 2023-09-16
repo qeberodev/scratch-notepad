@@ -3,7 +3,7 @@ import { Button } from "../../ui/button/button.tsx"
 import { nav } from "../settings-panel.css"
 import { PropsWithChildren } from "react"
 import { ArrowLeft } from "react-feather"
-import { COLOR } from "../../ui/styles.css.ts"
+import { themeVars } from "../../ui/styles.css.ts"
 
 export function GoHome(
     props: PropsWithChildren<SettingsPageProps & { title: string }>,
@@ -14,7 +14,7 @@ export function GoHome(
         <Button
             className={nav}
             onClick={() => onChange("home")}
-            icon={<ArrowLeft color={COLOR.secondary} />}
+            icon={<ArrowLeft color={themeVars.color.secondary} />}
         >
             {title}
         </Button>
