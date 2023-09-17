@@ -12,6 +12,7 @@ import { container, dialog } from "./editor.css"
 import { Button } from "../ui/button/button"
 import { Save, X, RotateCcw, Archive, Trash2 } from "react-feather"
 import { useNotes } from "../../model/note"
+import { themeVars } from "../ui/styles.css"
 
 type EditorProps = DialogContainerProps & {
     selectedNote?: string
@@ -119,33 +120,33 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                     onClick={() => {
                         props.onChange?.(false)
                     }}
-                    icon={<X color="white" />}
+                    icon={<X color={themeVars.color.secondary} />}
                 />
 
                 <Button
                     style={{ margin: "0" }}
                     title="Save Note"
                     onClick={saveNote}
-                    icon={<Save color="white" />}
+                    icon={<Save color={themeVars.color.secondary} />}
                 />
 
                 <Button
                     style={{ margin: "0" }}
                     title="Delete Note"
-                    icon={<Trash2 color="white" />}
+                    icon={<Trash2 color={themeVars.color.secondary} />}
                 />
 
                 <Button
                     style={{ margin: "0" }}
                     title="Archive Note"
-                    icon={<Archive color="white" />}
+                    icon={<Archive color={themeVars.color.secondary} />}
                 />
 
                 <Button
                     style={{ margin: "0" }}
                     title="Undo"
                     onClick={() => console.log("Undo Changes")}
-                    icon={<RotateCcw color="white" />}
+                    icon={<RotateCcw color={themeVars.color.secondary} />}
                 />
             </div>
             {props.open && (

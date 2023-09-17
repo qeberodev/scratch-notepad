@@ -17,7 +17,7 @@ type SettingsPanelProps = {
 export const pagesList: Record<Page, { title: string; icon: ReactNode }> = {
     about: {
         title: "About",
-        icon: <Info color={themeVars.color.primary} />,
+        icon: <Info color={themeVars.color.secondary} />,
     },
     general: {
         title: "General",

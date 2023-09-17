@@ -4,6 +4,7 @@ import { X } from "react-feather"
 import { Button } from "../ui/button/button"
 import { PropsWithChildren } from "react"
 import { animationConfig } from "../../animations"
+import { themeVars } from "../ui/styles.css"
 
 export type SidePanelProps = {
     open?: boolean
@@ -30,7 +31,7 @@ export function SidePanel(props: PropsWithChildren<SidePanelProps>) {
                     }}
                     title={"close side panel"}
                 >
-                    <X color="white" />
+                    <X color={themeVars.color.secondary} />
                 </Button>
             </section>
 

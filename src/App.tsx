@@ -95,7 +95,7 @@ function App() {
                                     top: "60px",
                                 }}
                             >
-                                <Plus color={themeVars.color.tertiary} />
+                                <Plus color={themeVars.color.secondary} />
                             </Button>
                         </span>
 
@@ -114,7 +114,11 @@ function App() {
                             }}
                         >
                             <Button
-                                icon={<Settings color={themeVars.color.primary} />}
+                                icon={
+                                    <Settings
+                                        color={themeVars.color.secondary}
+                                    />
+                                }
                                 onClick={() => setSidePanelOpen(true)}
                             />
                             <ArchivedButton count={archivedCount} />

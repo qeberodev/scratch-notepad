@@ -9,15 +9,16 @@ const container = s({
     color: themeVars.color.secondary,
     borderRadius: "4px",
     border: "none",
-    padding: 0,
+    padding: "0 4px",
     margin: 0,
 
     minWidth: `${BUTTON_SIZE}px`,
     minHeight: `${BUTTON_SIZE}px`,
-    display: "flex",
+    display: "inline-flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 4,
 
     ":hover": {
         cursor: "pointer",
@@ -27,7 +28,6 @@ const container = s({
 globalStyle(`${container} > svg`, {
     width: `${ICON_SIZE}px`,
     height: `${ICON_SIZE}px`,
-    stroke: themeVars.color.secondary,
     strokeWidth: "3px",
 })
 
