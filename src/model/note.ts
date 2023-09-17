@@ -80,7 +80,6 @@ export const useNotes = create<State & Action>()(
                             console.log("Save Note: ", { note })
 
                             state.notes[note.id] = note
-                            state.tags = []
                         }
                     })
                 },

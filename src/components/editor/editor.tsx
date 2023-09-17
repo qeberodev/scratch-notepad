@@ -10,7 +10,7 @@ import {
 import { tools } from "./editor-tools"
 import { container, dialog } from "./editor.css"
 import { Button } from "../ui/button/button"
-import { Save, X, RotateCcw } from "react-feather"
+import { Save, X, RotateCcw, Archive, Trash2 } from "react-feather"
 import { useNotes } from "../../model/note"
 
 type EditorProps = DialogContainerProps & {
@@ -89,7 +89,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             if (!note) return
             if (note.blocks.length === 0) return
 
-            save({ ...note, id: selectedNote })
+            save({ ...note, id: selectedNote, tags: [] })
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }
@@ -127,6 +127,18 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                     title="Save Note"
                     onClick={saveNote}
                     icon={<Save color="white" />}
+                />
+
+                <Button
+                    style={{ margin: "0" }}
+                    title="Delete Note"
+                    icon={<Trash2 color="white" />}
+                />
+
+                <Button
+                    style={{ margin: "0" }}
+                    title="Archive Note"
+                    icon={<Archive color="white" />}
                 />
 
                 <Button
