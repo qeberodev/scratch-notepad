@@ -4,6 +4,7 @@ import { Button } from "../ui/button/button"
 import { Maximize2, Trash, Archive } from "react-feather"
 import type { Note } from "../../model/note"
 import { themeVars } from "../ui/styles.css"
+import { Tag } from "../tag/tag"
 
 type NoteAction = {
     icon: ReactNode
@@ -88,12 +89,14 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                 ))}
             </div>
 
+            <div>{note.tags && note.tags.map((tag) => <Tag tag={tag} />)}</div>
+
             <div
                 style={{
                     display: "flex",
                     gap: "4px",
                     flexDirection: "row-reverse",
-                    borderTop: `1px dashed ${themeVars.color.secondary}33`,
+                    borderTop: `1px dashed ${themeVars.background.secondary}`,
                     marginTop: "16px",
                     paddingTop: "4px",
                 }}

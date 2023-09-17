@@ -21,7 +21,7 @@ const container = s({
 
     ":hover": {
         cursor: "pointer",
-        backgroundColor: themeVars.background.secondary
+        backgroundColor: themeVars.background.secondary,
     },
 })
 globalStyle(`${container} > svg`, {

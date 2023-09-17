@@ -31,12 +31,12 @@ export const configs: Record<Theme, ThemeTokens> = {
         background: {
             primary: "#f7f7f733",
             tertiary: "#ff602533",
-            secondary: "#26272422",
+            secondary: "#3c41491f",
         },
         color: {
             primary: "#f7f7f7",
+            secondary: "#3c4149",
             tertiary: "#ff6025",
-            secondary: "#262724",
         },
         fontFamily: "helvetica",
     },

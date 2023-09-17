@@ -3,31 +3,40 @@ import { immer } from "zustand/middleware/immer"
 import { OutputData } from "@editorjs/editorjs"
 import { persist } from "zustand/middleware"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Tag {
+    constructor(public id: string) {}
+}
 export interface Note extends OutputData {
     id?: string
     archived?: boolean
-}
-type State = {
-    notes: Record<string, Note>
+    tags: Tag[]
 }
 const _note_states = ["archived", "all", "not-archived"] as const
 type NoteState = (typeof _note_states)[number]
+
+type State = {
+    notes: Record<string, Note>
+    tags: Tag[]
+}
 type Action = {
     getNotes: (filter?: NoteState) => Note[]
     get: (id: string) => Note | undefined
     save: (note: Note) => void
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
+
+    addTag: (tag: string) => void
+    getTags: () => Tag[]
 }
 
 const generateUUID = () => self.crypto.randomUUID()
 
-export const useNotes = create(
+export const useNotes = create<State & Action>()(
     persist(
-        immer<State & Action>((set, get) => {
+        immer((set, get) => {
             return {
                 notes: {},
+                tags: [],
 
                 getNotes: (filter = "all") => {
                     const notes = Object.values(get().notes)
@@ -71,6 +80,7 @@ export const useNotes = create(
                             console.log("Save Note: ", { note })
 
                             state.notes[note.id] = note
+                            state.tags = []
                         }
                     })
                 },
@@ -87,6 +97,18 @@ export const useNotes = create(
                         delete state.notes[id]
                     })
                 },
+
+                // Tags
+                addTag: (t) => {
+                    set((state) => {
+                        const { tags } = state
+                        if (tags.find((tag) => tag.id === t)) return
+
+                        const newTag: Tag = new Tag(t)
+                        state.tags.push(newTag)
+                    })
+                },
+                getTags: () => get().tags,
             }
         }),
         {

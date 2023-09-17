@@ -1,7 +1,11 @@
 import { PropsWithChildren, ReactNode, useCallback, useMemo } from "react"
-import { Home, Info, Lock, Settings } from "react-feather"
+import { ArrowLeft, Home, Info, Lock, Settings } from "react-feather"
+import { nav } from "."
+import { toUpper } from "../../utils"
+import { Button } from "../ui/button/button"
 import { themeVars } from "../ui/styles.css"
-import { HomePage, GeneralPage } from "./pages"
+import { GeneralPage, HomePage } from "./pages"
+import { Privacy } from "./pages/privacy"
 
 export const pages = ["home", "general", "privacy", "about"] as const
 export type Page = (typeof pages)[number]
@@ -29,6 +33,23 @@ export const pagesList: Record<Page, { title: string; icon: ReactNode }> = {
     },
 }
 
+export function GoHome(
+    props: PropsWithChildren<SettingsPageProps & { title: string }>,
+) {
+    const { onChange, title } = props
+
+    return (
+        <Button
+            className={nav}
+            data-elevated
+            onClick={() => onChange("home")}
+            icon={<ArrowLeft color={themeVars.color.secondary} />}
+        >
+            {title}
+        </Button>
+    )
+}
+
 export type SettingsPageProps = { onChange: (page: Page) => void }
 
 export function SettingsPanel(props: PropsWithChildren<SettingsPanelProps>) {
@@ -41,16 +62,26 @@ export function SettingsPanel(props: PropsWithChildren<SettingsPanelProps>) {
             case "general": {
                 return GeneralPage
             }
+            case "privacy": {
+                return Privacy
+            }
             default: {
                 return () => null
             }
         }
     }, [page])
 
-    const handleChangePage = useCallback((id: Page) => onChange(id), [])
+    const handleChangePage = useCallback((id: Page) => onChange(id), [onChange])
 
     return (
         <>
+            {page && page !== "home" && (
+                <div>
+                    <GoHome title={toUpper(page)} onChange={handleChangePage} />
+                    <br />
+                </div>
+            )}
+
             <CurrentPage onChange={handleChangePage} />
         </>
     )

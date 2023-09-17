@@ -13,6 +13,7 @@ export function GoHome(
     return (
         <Button
             className={nav}
+            data-elevated
             onClick={() => onChange("home")}
             icon={<ArrowLeft color={themeVars.color.secondary} />}
         >
