@@ -46,7 +46,7 @@ export function SearchBar(props: PropsWithChildren<SearchBarProps>) {
                             borderTopLeftRadius: 0,
                             borderBottomLeftRadius: 0,
                             margin: 0,
-                            backgroundColor: `${themeVars.color.secondary}11`,
+                            backgroundColor: themeVars.background.secondary,
                         }}
                         onClick={handleClosing}
                     >

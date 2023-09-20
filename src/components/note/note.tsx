@@ -1,9 +1,10 @@
 import { PropsWithChildren, ReactNode, useCallback, useMemo } from "react"
 import { container, block as blockStyle, blocksContainer } from "./note.css"
 import { Button } from "../ui/button/button"
-import { Maximize2, Trash, Archive } from "react-feather"
+import { Maximize2, Trash2, Archive } from "react-feather"
 import type { Note } from "../../model/note"
 import { themeVars } from "../ui/styles.css"
+import { Tag } from "../tag/tag"
 
 type NoteAction = {
     icon: ReactNode
@@ -63,7 +64,7 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                 action: handleOpen,
             },
             {
-                icon: <Trash color={themeVars.color.secondary} />,
+                icon: <Trash2 color={themeVars.color.secondary} />,
                 action: handleDelete,
             },
             {
@@ -88,12 +89,17 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                 ))}
             </div>
 
+            <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+                {note.tags &&
+                    note.tags.map((tag) => <Tag key={tag.id} tag={tag} />)}
+            </div>
+
             <div
                 style={{
                     display: "flex",
                     gap: "4px",
                     flexDirection: "row-reverse",
-                    borderTop: `1px dashed ${themeVars.color.secondary}33`,
+                    borderTop: `1px dashed ${themeVars.background.secondary}`,
                     marginTop: "16px",
                     paddingTop: "4px",
                 }}

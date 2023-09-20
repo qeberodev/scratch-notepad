@@ -18,11 +18,12 @@ const container = s({
     gap: "10px",
     padding: "8px",
     boxSizing: "border-box",
+    boxShadow: `0 0 8px 1px ${themeVars.background.secondary}`,
 })
 
 const row = s({
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
 })
 
 export const BUTTON_SIZE = 32

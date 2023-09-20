@@ -3,31 +3,52 @@ import { immer } from "zustand/middleware/immer"
 import { OutputData } from "@editorjs/editorjs"
 import { persist } from "zustand/middleware"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Tag {
+    constructor(public id: string) {}
+}
 export interface Note extends OutputData {
     id?: string
     archived?: boolean
-}
-type State = {
-    notes: Record<string, Note>
+    tags: Tag[]
 }
 const _note_states = ["archived", "all", "not-archived"] as const
 type NoteState = (typeof _note_states)[number]
+
+type State = {
+    notes: Record<string, Note>
+    tags: Tag[]
+}
 type Action = {
+    clearData: () => void
+
     getNotes: (filter?: NoteState) => Note[]
     get: (id: string) => Note | undefined
     save: (note: Note) => void
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
+    addTag: (note: Note, tag: string) => void
+    getNoteTag: (id: string) => Tag[]
+
+    getTags: () => Tag[]
 }
 
 const generateUUID = () => self.crypto.randomUUID()
 
-export const useNotes = create(
+const initialState: State = {
+    notes: {},
+    tags: [],
+}
+export const useNotes = create<State & Action>()(
     persist(
-        immer<State & Action>((set, get) => {
+        immer((set, get) => {
             return {
-                notes: {},
+                ...initialState,
+                clearData: () => {
+                    set((state) => {
+                        state.tags = initialState.tags
+                        state.notes = initialState.notes
+                    })
+                },
 
                 getNotes: (filter = "all") => {
                     const notes = Object.values(get().notes)
@@ -87,6 +108,33 @@ export const useNotes = create(
                         delete state.notes[id]
                     })
                 },
+
+                // Tags
+                addTag: (note: Note, t) => {
+                    set((state) => {
+                        const { tags } = state
+                        if (tags.find((tag) => tag.id === t)) return
+
+                        const newTag: Tag = new Tag(t)
+                        state.tags.push(newTag)
+
+                        const id = note.id
+                        if (!id) throw Error("Note doesn't exist")
+                        const savedNote = get().notes[id]
+
+                        if (!savedNote)
+                            throw new Error("Note instance doesn't exist")
+
+                        state.notes[id] = { ...note, tags: [...tags, newTag] }
+                    })
+                },
+                getNoteTag: (id) => {
+                    const note = get().notes[id]
+                    if (!note) throw new Error("Note instance doesn't exist")
+
+                    return note.tags
+                },
+                getTags: () => get().tags,
             }
         }),
         {

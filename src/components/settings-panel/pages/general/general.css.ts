@@ -11,6 +11,7 @@ export const item = s({
 
     fontWeight: "bold",
     fontSize: "medium",
+    cursor: "pointer",
 
     selectors: {
         "&[data-state=checked]": {

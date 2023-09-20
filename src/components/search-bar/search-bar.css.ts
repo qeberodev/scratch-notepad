@@ -7,11 +7,11 @@ export const container = s({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 4
+    gap: 4,
 })
 
 export const inputBox = s({
-    background: themeVars.color.primary,
+    background: themeVars.background.secondary,
     border: "none",
     borderRadius: 4,
     borderTopRightRadius: 0,

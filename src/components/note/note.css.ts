@@ -9,20 +9,21 @@ export const container = s({
     minHeight: "3em",
     borderRadius: 4,
     fontFamily: "DM Serif Display, serif",
+    boxShadow: `0 0 1px 1px ${themeVars.background.secondary}`,
 })
 
 export const block = s({})
 globalStyle(`${block}[data-type="paragraph"]`, {
     fontSize: "small",
-    fontFamily: FONT.sanSerif
+    fontFamily: FONT.sanSerif,
 })
 globalStyle(`${block}[data-type="header"]`, {
     fontSize: "large",
-    fontWeight: "bold"
+    fontWeight: "bold",
 })
 
 export const blocksContainer = s({
-    display: 'flex',
+    display: "flex",
     flexDirection: "column",
-    gap: ".5em"
+    gap: ".5em",
 })
