@@ -57,5 +57,5 @@ export const configs: Record<Theme, ThemeTokens> = {
 
 export const FONT = {
     sanSerif: "Nunito, sans-serif",
-    serif: "DM Serif Display, serif",
+    serif: "Merriweather, serif",
 }

@@ -9,4 +9,10 @@ const container = s({
     fontFamily: FONT.sanSerif,
 })
 
-export { container }
+const noteList = s({
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 8,
+})
+
+export { container, noteList }

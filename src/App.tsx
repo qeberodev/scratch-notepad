@@ -1,18 +1,17 @@
 import { useMemo, useState } from "react"
-import "./App.css"
-import { container } from "./application.css"
-import { Button } from "./components/ui/button/button"
 import { Plus, Settings } from "react-feather"
-import { SearchBar } from "./components/search-bar"
-import { Editor } from "./components/editor/editor"
-import { useNotes } from "./model/note"
-import { NoteCard } from "./components/note/note"
-import { SidePanel } from "./components/side-panel"
-import { SettingsPanel } from "./components/settings-panel"
+import "./App.css"
+import { container, noteList } from "./application.css"
 import { ArchivedButton } from "./components/archived-button/archived-button"
-import { Page } from "./components/settings-panel"
-import { useTheme } from "./hooks/use-theme"
+import { Editor } from "./components/editor/editor"
+import { NoteCard } from "./components/note/note"
+import { SearchBar } from "./components/search-bar"
+import { Page, SettingsPanel } from "./components/settings-panel"
+import { SidePanel } from "./components/side-panel"
+import { Button } from "./components/ui/button/button"
 import { themeVars } from "./components/ui/styles.css"
+import { useTheme } from "./hooks/use-theme"
+import { useNotes } from "./model/note"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -137,7 +136,7 @@ function App() {
                     </div>
                 </section>
 
-                <section>
+                <section className={noteList}>
                     {getNotes("not-archived").map((note) => (
                         <NoteCard
                             key={note.id}
