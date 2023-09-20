@@ -45,7 +45,8 @@ const defaultData: OutputData = {
 
 const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
-    const { selectedNote, onChange, ...rest } = props
+    const { selectedNote: id, onChange, ...rest } = props
+    const [selectedNote, setSelectedNote] = useState(id)
     const { save, get, notes } = useNotes()
     const note = useMemo(() => {
         return (
@@ -120,7 +121,8 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             if (!note) return
             if (note.blocks.length === 0) return
 
-            save({ ...note, id: selectedNote, tags })
+            const saved = save({ ...note, id: selectedNote, tags })
+            setSelectedNote(saved.id)
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }

@@ -23,7 +23,7 @@ type Action = {
 
     getNotes: (filter?: NoteState) => Note[]
     get: (id: string) => Note | undefined
-    save: (note: Note) => void
+    save: (note: Note) => Note
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
     addTag: (note: Note, tag: string) => void
@@ -94,6 +94,8 @@ export const useNotes = create<State & Action>()(
                             state.notes[note.id] = note
                         }
                     })
+
+                    return note
                 },
                 archive: (id, archive) => {
                     set((state) => {
