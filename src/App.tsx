@@ -51,25 +51,29 @@ function App() {
 
     return (
         <div style={vars}>
-            <SidePanel
-                open={sidePanelOpen}
-                onClose={(state) => {
-                    setSidePanelOpen(state)
-                    setSettingsPage("home")
-                }}
-            >
-                <SettingsPanel
-                    page={settingsPage}
-                    onChange={(page) => setSettingsPage(page)}
-                />
-            </SidePanel>
+            {sidePanelOpen && (
+                <SidePanel
+                    open={sidePanelOpen}
+                    onClose={(state) => {
+                        setSidePanelOpen(state)
+                        setSettingsPage("home")
+                    }}
+                >
+                    <SettingsPanel
+                        page={settingsPage}
+                        onChange={(page) => setSettingsPage(page)}
+                    />
+                </SidePanel>
+            )}
 
             <main className={container}>
-                <Editor
-                    selectedNote={selectedNote}
-                    open={dialogOpen}
-                    onChange={setDialogOpen}
-                />
+                {dialogOpen && (
+                    <Editor
+                        selectedNote={selectedNote}
+                        open={dialogOpen}
+                        onChange={setDialogOpen}
+                    />
+                )}
 
                 <section>
                     <div

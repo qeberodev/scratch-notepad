@@ -19,4 +19,10 @@ export const counter = s({
     bottom: 0,
     right: 0,
     transform: "translate(-40%, -40%)",
+
+    selectors: {
+        "&[data-empty=true]": {
+            backgroundColor: themeVars.color.secondary,
+        },
+    },
 })

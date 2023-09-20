@@ -12,7 +12,9 @@ export function ArchivedButton(props: PropsWithChildren<{ count: number }>) {
             className={container}
             icon={<Archive color={themeVars.color.secondary} />}
         >
-            <span className={counter}>{count}</span>
+            <span data-empty={count === 0} className={counter}>
+                {count}
+            </span>
         </Button>
     )
 }

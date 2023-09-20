@@ -89,7 +89,10 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                 ))}
             </div>
 
-            <div>{note.tags && note.tags.map((tag) => <Tag tag={tag} />)}</div>
+            <div>
+                {note.tags &&
+                    note.tags.map((tag) => <Tag key={tag.id} tag={tag} />)}
+            </div>
 
             <div
                 style={{

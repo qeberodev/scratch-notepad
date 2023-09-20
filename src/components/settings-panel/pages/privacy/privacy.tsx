@@ -1,10 +1,20 @@
 import { Lock, XOctagon } from "react-feather"
 import { Button } from "../../../ui/button/button"
 import { themeVars } from "../../../ui/styles.css"
-import { useCallback, useMemo, useRef, useState } from "react"
+import {
+    PropsWithChildren,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 
 const CLEAR_TIMEOUT = 4 * 1000
-export function Privacy() {
+type PrivacyPageProps = {
+    onClearData?: () => void
+}
+export function Privacy(props: PropsWithChildren<PrivacyPageProps>) {
+    const { onClearData } = props
     const [confirmClear, isConfirm] = useState(false)
     const clearConfirmTimeout = useRef<NodeJS.Timeout>()
 
@@ -26,24 +36,29 @@ export function Privacy() {
 
     const handleClear = useCallback(() => {
         if (confirmClear) {
-            //TODO - Clearing User Data
-            console.log("Clearing User Data")
+            onClearData && onClearData()
 
             isConfirm(false)
             clearConfirmTimeout.current &&
                 clearTimeout(clearConfirmTimeout.current)
-            return
+        } else {
+            clearConfirmTimeout.current = setTimeout(() => {
+                isConfirm(false)
+            }, CLEAR_TIMEOUT)
+            isConfirm(true)
         }
-
-        clearConfirmTimeout.current = setTimeout(() => {
-            isConfirm(false)
-        }, CLEAR_TIMEOUT)
-        isConfirm(true)
-    }, [confirmClear])
+    }, [confirmClear, onClearData])
 
     return (
         <>
             <section>
+                <h3
+                    style={{
+                        marginTop: 0,
+                    }}
+                >
+                    <u>Clear Data</u>
+                </h3>
                 We respect your right to privacy and give you the ability to
                 control your data. Our Data Clear functionality allows you to:
                 <ul>

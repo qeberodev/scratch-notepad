@@ -6,6 +6,7 @@ import { Button } from "../ui/button/button"
 import { themeVars } from "../ui/styles.css"
 import { GeneralPage, HomePage } from "./pages"
 import { Privacy } from "./pages/privacy"
+import { useNotes } from "../../model/note"
 
 export const pages = ["home", "general", "privacy", "about"] as const
 export type Page = (typeof pages)[number]
@@ -53,6 +54,7 @@ export function GoHome(
 export type SettingsPageProps = { onChange: (page: Page) => void }
 
 export function SettingsPanel(props: PropsWithChildren<SettingsPanelProps>) {
+    const [clearData] = useNotes((state) => [state.clearData])
     const { page, onChange } = props
     const CurrentPage = useMemo(() => {
         switch (page) {
@@ -63,13 +65,13 @@ export function SettingsPanel(props: PropsWithChildren<SettingsPanelProps>) {
                 return GeneralPage
             }
             case "privacy": {
-                return Privacy
+                return () => <Privacy onClearData={clearData} />
             }
             default: {
                 return () => null
             }
         }
-    }, [page])
+    }, [clearData, page])
 
     const handleChangePage = useCallback((id: Page) => onChange(id), [onChange])
 

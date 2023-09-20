@@ -19,24 +19,36 @@ type State = {
     tags: Tag[]
 }
 type Action = {
+    clearData: () => void
+
     getNotes: (filter?: NoteState) => Note[]
     get: (id: string) => Note | undefined
     save: (note: Note) => void
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
+    addTag: (note: Note, tag: string) => void
+    getNoteTag: (id: string) => Tag[]
 
-    addTag: (tag: string) => void
     getTags: () => Tag[]
 }
 
 const generateUUID = () => self.crypto.randomUUID()
 
+const initialState: State = {
+    notes: {},
+    tags: [],
+}
 export const useNotes = create<State & Action>()(
     persist(
         immer((set, get) => {
             return {
-                notes: {},
-                tags: [],
+                ...initialState,
+                clearData: () => {
+                    set((state) => {
+                        state.tags = initialState.tags
+                        state.notes = initialState.notes
+                    })
+                },
 
                 getNotes: (filter = "all") => {
                     const notes = Object.values(get().notes)
@@ -98,14 +110,29 @@ export const useNotes = create<State & Action>()(
                 },
 
                 // Tags
-                addTag: (t) => {
+                addTag: (note: Note, t) => {
                     set((state) => {
                         const { tags } = state
                         if (tags.find((tag) => tag.id === t)) return
 
                         const newTag: Tag = new Tag(t)
                         state.tags.push(newTag)
+
+                        const id = note.id
+                        if (!id) throw Error("Note doesn't exist")
+                        const savedNote = get().notes[id]
+
+                        if (!savedNote)
+                            throw new Error("Note instance doesn't exist")
+
+                        state.notes[id] = { ...note, tags: [...tags, newTag] }
                     })
+                },
+                getNoteTag: (id) => {
+                    const note = get().notes[id]
+                    if (!note) throw new Error("Note instance doesn't exist")
+
+                    return note.tags
                 },
                 getTags: () => get().tags,
             }
