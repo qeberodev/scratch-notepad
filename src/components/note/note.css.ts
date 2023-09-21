@@ -10,6 +10,9 @@ export const container = s({
     borderRadius: 4,
     fontFamily: "DM Serif Display, serif",
     boxShadow: `0 0 1px 1px ${themeVars.background.secondary}`,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
 })
 
 export const block = s({})

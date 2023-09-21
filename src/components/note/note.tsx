@@ -89,24 +89,26 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
                 ))}
             </div>
 
-            <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
-                {note.tags &&
-                    note.tags.map((tag) => <Tag key={tag.id} tag={tag} />)}
-            </div>
+            <div>
+                <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+                    {note.tags &&
+                        note.tags.map((tag) => <Tag key={tag.id} tag={tag} />)}
+                </div>
 
-            <div
-                style={{
-                    display: "flex",
-                    gap: "4px",
-                    flexDirection: "row-reverse",
-                    borderTop: `1px dashed ${themeVars.background.secondary}`,
-                    marginTop: "16px",
-                    paddingTop: "4px",
-                }}
-            >
-                {noteActions.map(({ icon, action }, idx) => (
-                    <Button icon={icon} onClick={action} key={idx} />
-                ))}
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "4px",
+                        flexDirection: "row-reverse",
+                        borderTop: `1px dashed ${themeVars.background.secondary}`,
+                        marginTop: "16px",
+                        paddingTop: "4px",
+                    }}
+                >
+                    {noteActions.map(({ icon, action }, idx) => (
+                        <Button icon={icon} onClick={action} key={idx} />
+                    ))}
+                </div>
             </div>
         </div>
     )
