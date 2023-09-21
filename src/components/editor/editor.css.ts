@@ -23,17 +23,19 @@ const dialog = s({
 })
 
 const tag = s({
-    fontSize: "x-small",
     borderRadius: 4,
-    background: themeVars.background.secondary,
-    padding: "2px 4px",
+    fontWeight: "light",
+    padding: "0 4px",
+    fontSize: "x-small",
+    background: themeVars.background.tertiary,
+    color: themeVars.color.secondary,
 })
 
 const tagInput = s({
     border: "none",
     outline: "none",
     flex: 1,
-    fontSize: "small",
+    fontSize: "x-small",
 })
 
 export { container, dialog, tag, tagInput }

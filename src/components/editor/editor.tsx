@@ -258,34 +258,25 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                                 key={t.id}
                                 className={tag}
                                 style={{
-                                    display: "flex",
+                                    display: "inline-flex",
                                     gap: 1,
                                     alignItems: "center",
                                     justifyContent: "center",
                                 }}
                             >
-                                {t.id}
+                                <span>{t.id}</span>
 
-                                <button
+                                <X
                                     style={{
-                                        margin: 0,
-                                        padding: 0,
-                                        width: 12,
-                                        height: 12,
-                                        border: "none",
                                         cursor: "pointer",
-                                        backgroundColor: "transparent",
                                     }}
                                     onClick={() => removeTag(t.id)}
-                                >
-                                    <X
-                                        size={12}
-                                        color={themeVars.color.secondary}
-                                        enableBackground={
-                                            themeVars.background.primary
-                                        }
-                                    />
-                                </button>
+                                    size={10}
+                                    color={themeVars.color.secondary}
+                                    enableBackground={
+                                        themeVars.background.primary
+                                    }
+                                />
                             </span>
                         ))}
                     </span>

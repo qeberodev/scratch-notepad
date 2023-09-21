@@ -4,7 +4,7 @@ import { FONT, themeVars } from "../ui/styles.css"
 export const tag = s({
     borderRadius: 4,
     padding: "0 4px",
-    fontWeight: "bold",
+    fontWeight: "light",
     fontSize: "x-small",
     fontFamily: FONT.sanSerif,
     background: themeVars.background.tertiary,
