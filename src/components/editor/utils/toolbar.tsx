@@ -65,9 +65,10 @@ export type ToolbarActionsProps = {
     closeEditor: () => void
     saveNote: () => void
     deleteNote: () => void
+    archiveNote: () => void
 }
 export function useToolbarActions(props: ToolbarActionsProps) {
-    const { saveNote, closeEditor, deleteNote } = props
+    const { saveNote, closeEditor, archiveNote, deleteNote } = props
 
     /**
      * @description A list of note actions that can be performed using
@@ -82,13 +83,16 @@ export function useToolbarActions(props: ToolbarActionsProps) {
             },
             {
                 title: "Archive Note",
-                action: () => console.log("Archiving Note"),
+                action: archiveNote,
                 icon: <Archive color={themeVars.color.secondary} />,
             },
             {
                 title: "Delete Note",
                 action: () => console.log("Deleting Note"),
-                component: <DeleteConfirmation deleteNote={deleteNote} />,
+                /** NOTE - key is used here because the component rendered doesn't have a key element  */
+                component: (
+                    <DeleteConfirmation key={55} deleteNote={deleteNote} />
+                ),
             },
             {
                 title: "Save Note",
@@ -101,7 +105,7 @@ export function useToolbarActions(props: ToolbarActionsProps) {
                 icon: <X color={themeVars.color.secondary} />,
             },
         ]
-    }, [closeEditor, saveNote, deleteNote])
+    }, [archiveNote, deleteNote, saveNote, closeEditor])
 
     return {
         actionList,

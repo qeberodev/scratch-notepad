@@ -48,7 +48,7 @@ const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
     const { selectedNote: id, onChange, ...rest } = props
     const [selectedNote, setSelectedNote] = useState(id)
-    const { save, get, notes, delete: _delete } = useNotes()
+    const { save, get, notes, delete: _delete, archive } = useNotes()
     const note = useMemo(() => {
         return (
             (!!selectedNote && get(selectedNote)) || {
@@ -62,10 +62,6 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         () => Object.keys(notes).length !== 0,
         [notes],
     )
-
-    useEffect(() => {
-        console.log({ note })
-    }, [note])
 
     const initScheduled = useRef(false)
     const instance = useRef<EditorJS | null>(null)
@@ -117,17 +113,22 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
 
     const saveNote = useCallback(async () => {
         try {
-            const note = await instance.current?.save()
+            const data = await instance.current?.save()
 
-            if (!note) return
-            if (note.blocks.length === 0) return
+            if (!data) return
+            if (data.blocks.length === 0) return
 
-            const saved = save({ ...note, id: selectedNote, tags })
+            const saved = save({
+                ...data,
+                id: selectedNote,
+                archived: note.archived,
+                tags,
+            })
             setSelectedNote(saved.id)
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }
-    }, [tags, save, selectedNote])
+    }, [save, selectedNote, note.archived, tags])
 
     const closeEditor = useCallback(
         ({ noSave }: { noSave: boolean } = { noSave: false }) => {
@@ -149,10 +150,16 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         closeEditor({ noSave: true })
     }, [_delete, closeEditor, note, selectedNote])
 
+    const archiveNote = useCallback(() => {
+        if (selectedNote) archive(selectedNote, true)
+        closeEditor({ noSave: true })
+    }, [selectedNote, archive, closeEditor])
+
     const { actionList } = useToolbarActions({
         saveNote,
         closeEditor,
         deleteNote,
+        archiveNote,
     })
 
     /**
