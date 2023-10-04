@@ -51,7 +51,7 @@ export function Privacy(props: PropsWithChildren<PrivacyPageProps>) {
 
     return (
         <>
-            <section>
+            <section style={{ padding: "0 8px" }}>
                 <h3
                     style={{
                         marginTop: 0,
@@ -59,8 +59,12 @@ export function Privacy(props: PropsWithChildren<PrivacyPageProps>) {
                 >
                     <u>Clear Data</u>
                 </h3>
-                We respect your right to privacy and give you the ability to
-                control your data. Our Data Clear functionality allows you to:
+
+                <span>
+                    We respect your right to privacy and give you the ability to
+                    control your data. Our Data Clear functionality allows you
+                    to:
+                </span>
                 <ul>
                     <li>
                         <b>Clear Personal Data: </b> Remove all personal data,

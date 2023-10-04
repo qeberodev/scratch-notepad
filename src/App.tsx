@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { Plus, Settings } from "react-feather"
 import "./App.css"
 import { container, noteList } from "./application.css"
@@ -31,6 +31,7 @@ function App() {
         return getNotes("archived").length
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notes, getNotes])
+    const mainRef = useRef<HTMLDivElement>(null)
 
     const createNote = () => {
         setSelectedNote(undefined)
@@ -50,8 +51,9 @@ function App() {
 
     return (
         <div style={vars}>
-            {sidePanelOpen && (
+            <main ref={mainRef} id="app-root-main" className={container}>
                 <SidePanel
+                    root={mainRef.current}
                     open={sidePanelOpen}
                     onClose={(state) => {
                         setSidePanelOpen(state)
@@ -63,16 +65,13 @@ function App() {
                         onChange={(page) => setSettingsPage(page)}
                     />
                 </SidePanel>
-            )}
 
-            <main className={container}>
-                {dialogOpen && (
-                    <Editor
-                        selectedNote={selectedNote}
-                        open={dialogOpen}
-                        onChange={setDialogOpen}
-                    />
-                )}
+                <Editor
+                    root={mainRef.current}
+                    selectedNote={selectedNote}
+                    open={dialogOpen}
+                    onChange={setDialogOpen}
+                />
 
                 <section>
                     <div

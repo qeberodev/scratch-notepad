@@ -7,6 +7,7 @@ const container = s({
     flexDirection: "column",
     gap: "20px",
     fontFamily: FONT.sanSerif,
+    padding: "2rem",
 })
 
 const noteList = s({

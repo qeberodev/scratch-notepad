@@ -23,9 +23,10 @@ import {
 import { tools } from "./editor-tools"
 import { container, dialog, tag, tagInput } from "./editor.css"
 import { Button } from "../ui/button/button"
-import { Save, X, RotateCcw, Archive, Trash2 } from "react-feather"
+import { X } from "react-feather"
 import { Tag, useNotes } from "../../model/note"
 import { themeVars } from "../ui/styles.css"
+import { useToolbarActions } from "./utils/toolbar"
 
 type EditorProps = DialogContainerProps & {
     selectedNote?: string
@@ -47,7 +48,8 @@ const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
     const { selectedNote: id, onChange, ...rest } = props
     const [selectedNote, setSelectedNote] = useState(id)
-    const { save, get, notes } = useNotes()
+    const { save, get, notes, delete: _delete, archive } = useNotes()
+    const editorContainerRef = useRef<HTMLDivElement>(null)
     const note = useMemo(() => {
         return (
             (!!selectedNote && get(selectedNote)) || {
@@ -62,15 +64,14 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         [notes],
     )
 
-    useEffect(() => {
-        console.log({ note })
-    }, [note])
-
     const initScheduled = useRef(false)
     const instance = useRef<EditorJS | null>(null)
     const initEditor = useCallback(() => {
-        initScheduled.current = true
+        if (!props.open) return
+        if (!editorContainerRef.current) return
+
         if (instance.current) return
+        initScheduled.current = true
 
         let data: OutputData
         if (!selectedNote) {
@@ -91,13 +92,13 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             tools: tools,
             autofocus: false,
             hideToolbar: false,
-            holder: EDITOR_HOLDER_ID,
+            holder: editorContainerRef.current,
             placeholder: "Start Typing Here 🖊️...",
             onReady: () => {
                 instance.current = editor
             },
         })
-    }, [get, notesAvailable, selectedNote])
+    }, [props.open, selectedNote, notesAvailable, get])
 
     // This will run only once
     useEffect(() => {
@@ -116,56 +117,55 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
 
     const saveNote = useCallback(async () => {
         try {
-            const note = await instance.current?.save()
+            const data = await instance.current?.save()
 
-            if (!note) return
-            if (note.blocks.length === 0) return
+            if (!data) return
+            if (data.blocks.length === 0) return
 
-            const saved = save({ ...note, id: selectedNote, tags })
+            const saved = save({
+                ...data,
+                id: selectedNote,
+                archived: note.archived,
+                tags,
+            })
             setSelectedNote(saved.id)
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }
-    }, [tags, save, selectedNote])
+    }, [save, selectedNote, note.archived, tags])
 
-    const closeEditor = useCallback(() => {
-        selectedNote && saveNote()
-        onChange && onChange(false)
-    }, [onChange, saveNote, selectedNote])
+    const closeEditor = useCallback(
+        ({ noSave }: { noSave: boolean } = { noSave: false }) => {
+            if (!noSave) selectedNote && saveNote()
+            onChange && onChange(false)
+            initScheduled.current = false
+        },
+        [onChange, saveNote, selectedNote],
+    )
 
-    /**
-     * @description A list of note actions that can be performed using
-     *      the toolbar.
-     **/
-    const actionList = useMemo(() => {
-        return [
-            {
-                title: "Undo",
-                action: () => console.log("Undo Changes"),
-                icon: <RotateCcw color={themeVars.color.secondary} />,
-            },
-            {
-                title: "Archive Note",
-                action: () => console.log("Archiving Note"),
-                icon: <Archive color={themeVars.color.secondary} />,
-            },
-            {
-                title: "Delete Note",
-                action: () => console.log("Deleting Note"),
-                icon: <Trash2 color={themeVars.color.secondary} />,
-            },
-            {
-                title: "Save Note",
-                action: saveNote,
-                icon: <Save color={themeVars.color.secondary} />,
-            },
-            {
-                title: "Close Editor",
-                action: closeEditor,
-                icon: <X color={themeVars.color.secondary} />,
-            },
-        ]
-    }, [closeEditor, saveNote])
+    const deleteNote = useCallback(() => {
+        if (!selectedNote) {
+            setTags([])
+            instance.current?.blocks.clear()
+        } else {
+            if (!(note && note.id)) return
+            _delete(note.id)
+        }
+
+        closeEditor({ noSave: true })
+    }, [_delete, closeEditor, note, selectedNote])
+
+    const archiveNote = useCallback(() => {
+        if (selectedNote) archive(selectedNote, true)
+        closeEditor({ noSave: true })
+    }, [selectedNote, archive, closeEditor])
+
+    const { actionList } = useToolbarActions({
+        saveNote,
+        closeEditor,
+        deleteNote,
+        archiveNote,
+    })
 
     /**
      * Handles keyboard actions for the editor window.
@@ -183,8 +183,9 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
     const addTag = useCallback((tag: Tag) => {
         setTags((restTags) => {
             const exists = Boolean(restTags.find((t) => t.id === tag.id))
+            const isEmpty = tag.id === ""
 
-            if (exists) return restTags
+            if (exists || isEmpty) return restTags
             return [...restTags, tag]
         })
     }, [])
@@ -289,19 +290,23 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                     />
                 </span>
 
-                {actionList.map(({ action, title, icon }) => (
-                    <Button
-                        key={title}
-                        style={{ margin: "0" }}
-                        title={title}
-                        onClick={action}
-                        icon={icon}
-                    />
-                ))}
+                {actionList.map(
+                    ({ action, title, icon, component }) =>
+                        component ?? (
+                            <Button
+                                key={title}
+                                style={{ margin: "0" }}
+                                title={title}
+                                onClick={action}
+                                icon={icon}
+                            />
+                        ),
+                )}
             </div>
             {props.open && (
                 <div
                     onKeyDown={handleKeyDown}
+                    ref={editorContainerRef}
                     id={EDITOR_HOLDER_ID}
                     className={container}
                 />
