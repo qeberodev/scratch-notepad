@@ -49,6 +49,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
     const { selectedNote: id, onChange, ...rest } = props
     const [selectedNote, setSelectedNote] = useState(id)
     const { save, get, notes, delete: _delete, archive } = useNotes()
+    const editorContainerRef = useRef<HTMLDivElement>(null)
     const note = useMemo(() => {
         return (
             (!!selectedNote && get(selectedNote)) || {
@@ -66,8 +67,11 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
     const initScheduled = useRef(false)
     const instance = useRef<EditorJS | null>(null)
     const initEditor = useCallback(() => {
-        initScheduled.current = true
+        if (!props.open) return
+        if (!editorContainerRef.current) return
+
         if (instance.current) return
+        initScheduled.current = true
 
         let data: OutputData
         if (!selectedNote) {
@@ -88,13 +92,13 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             tools: tools,
             autofocus: false,
             hideToolbar: false,
-            holder: EDITOR_HOLDER_ID,
+            holder: editorContainerRef.current,
             placeholder: "Start Typing Here 🖊️...",
             onReady: () => {
                 instance.current = editor
             },
         })
-    }, [get, notesAvailable, selectedNote])
+    }, [props.open, selectedNote, notesAvailable, get])
 
     // This will run only once
     useEffect(() => {
@@ -134,6 +138,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         ({ noSave }: { noSave: boolean } = { noSave: false }) => {
             if (!noSave) selectedNote && saveNote()
             onChange && onChange(false)
+            initScheduled.current = false
         },
         [onChange, saveNote, selectedNote],
     )
@@ -301,6 +306,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             {props.open && (
                 <div
                     onKeyDown={handleKeyDown}
+                    ref={editorContainerRef}
                     id={EDITOR_HOLDER_ID}
                     className={container}
                 />
