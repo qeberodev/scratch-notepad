@@ -5,13 +5,15 @@ import { Button } from "../ui/button/button"
 import { PropsWithChildren } from "react"
 import { animationConfig } from "../../animations"
 import { themeVars } from "../ui/styles.css"
+import * as Portal from "@radix-ui/react-portal"
 
 export type SidePanelProps = {
     open?: boolean
     onClose?: (state: boolean) => void
+    root?: HTMLElement | null
 }
 export function SidePanel(props: PropsWithChildren<SidePanelProps>) {
-    const { open, onClose, children } = props
+    const { open, root, onClose, children } = props
 
     const transitions = useTransition(open, {
         from: {
@@ -28,28 +30,30 @@ export function SidePanel(props: PropsWithChildren<SidePanelProps>) {
 
     return transitions((styles, items) =>
         items ? (
-            <animated.div style={styles} className={container}>
-                <section
-                    className={row}
-                    style={{ flexDirection: "row-reverse" }}
-                >
-                    <Button
-                        onClick={() => onClose && onClose(!open)}
-                        style={{
-                            borderRadius: "50%",
-                            padding: 0,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                        title={"close side panel"}
+            <Portal.Root container={root} asChild>
+                <animated.div style={styles} className={container}>
+                    <section
+                        className={row}
+                        style={{ flexDirection: "row-reverse" }}
                     >
-                        <X color={themeVars.color.secondary} />
-                    </Button>
-                </section>
+                        <Button
+                            onClick={() => onClose && onClose(!open)}
+                            style={{
+                                borderRadius: "50%",
+                                padding: 0,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                            title={"close side panel"}
+                        >
+                            <X color={themeVars.color.secondary} />
+                        </Button>
+                    </section>
 
-                <section>{children}</section>
-            </animated.div>
+                    <section>{children}</section>
+                </animated.div>
+            </Portal.Root>
         ) : null,
     )
 }

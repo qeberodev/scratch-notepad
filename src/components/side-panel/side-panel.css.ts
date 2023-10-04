@@ -3,7 +3,7 @@ import { themeVars } from "../ui/styles.css"
 
 export const SIDE_PANEL_WIDTH = 430
 const container = s({
-    height: "100%",
+    height: "100vh",
     width: `${SIDE_PANEL_WIDTH}px`,
     background: themeVars.color.primary,
     zIndex: 2,

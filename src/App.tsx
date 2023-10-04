@@ -51,8 +51,9 @@ function App() {
 
     return (
         <div style={vars}>
-            {sidePanelOpen && (
+            <main ref={mainRef} id="app-root-main" className={container}>
                 <SidePanel
+                    root={mainRef.current}
                     open={sidePanelOpen}
                     onClose={(state) => {
                         setSidePanelOpen(state)
@@ -64,9 +65,7 @@ function App() {
                         onChange={(page) => setSettingsPage(page)}
                     />
                 </SidePanel>
-            )}
 
-            <main ref={mainRef} id="app-root-main" className={container}>
                 <Editor
                     root={mainRef.current}
                     selectedNote={selectedNote}
