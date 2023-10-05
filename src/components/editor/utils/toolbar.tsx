@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react"
-import { RotateCcw, Trash2, Archive, Save, X } from "react-feather"
+import { RotateCcw, Trash2, Archive, Save, X, PlusCircle } from "react-feather"
 import { Button } from "../../ui/button/button"
 import { Popup } from "../../popup"
 import { themeVars } from "../../ui/styles.css"
@@ -66,9 +66,13 @@ export type ToolbarActionsProps = {
     saveNote: () => void
     deleteNote: () => void
     archiveNote: () => void
+
+    selectedNote?: string
 }
 export function useToolbarActions(props: ToolbarActionsProps) {
-    const { saveNote, closeEditor, archiveNote, deleteNote } = props
+    const { selectedNote, saveNote, closeEditor, archiveNote, deleteNote } =
+        props
+    const noteExist = useMemo(() => !!selectedNote, [selectedNote])
 
     /**
      * @description A list of note actions that can be performed using
@@ -95,9 +99,13 @@ export function useToolbarActions(props: ToolbarActionsProps) {
                 ),
             },
             {
-                title: "Save Note",
+                title: noteExist ? "Save Note" : "Add Note",
                 action: saveNote,
-                icon: <Save color={themeVars.color.secondary} />,
+                icon: noteExist ? (
+                    <Save color={themeVars.color.secondary} />
+                ) : (
+                    <PlusCircle color={themeVars.color.secondary} />
+                ),
             },
             {
                 title: "Close Editor",
@@ -105,7 +113,7 @@ export function useToolbarActions(props: ToolbarActionsProps) {
                 icon: <X color={themeVars.color.secondary} />,
             },
         ]
-    }, [archiveNote, deleteNote, saveNote, closeEditor])
+    }, [archiveNote, noteExist, deleteNote, saveNote, closeEditor])
 
     return {
         actionList,

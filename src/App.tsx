@@ -12,18 +12,22 @@ import { Button } from "./components/ui/button/button"
 import { themeVars } from "./components/ui/styles.css"
 import { useTheme } from "./hooks/use-theme"
 import { useNotes } from "./model/note"
+import { TagSelectList } from "./components/tag-select-list"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [entry, setEntry] = useState("")
     const [selectedNote, setSelectedNote] = useState<string>()
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
-    const [notes, getNotes, deleteNote, archiveNote] = useNotes((state) => [
-        state.notes,
-        state.getNotes,
-        state.delete,
-        state.archive,
-    ])
+    const [notes, getNotes, deleteNote, archiveNote, tags] = useNotes(
+        (state) => [
+            state.notes,
+            state.getNotes,
+            state.delete,
+            state.archive,
+            state.tags,
+        ],
+    )
     const [settingsPage, setSettingsPage] = useState<Page>("home")
     const { vars } = useTheme()
 
@@ -69,6 +73,7 @@ function App() {
                 <Editor
                     root={mainRef.current}
                     selectedNote={selectedNote}
+                    onSelectedNoteChange={setSelectedNote}
                     open={dialogOpen}
                     onChange={setDialogOpen}
                 />
@@ -101,7 +106,7 @@ function App() {
                             </Button>
                         </span>
 
-                        <span>Home</span>
+                        <TagSelectList selectedTag="apple" tags={tags} />
 
                         <span
                             style={{

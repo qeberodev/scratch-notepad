@@ -1,3 +1,4 @@
+import { APP_NAME } from "@app/constants"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 import { OutputData } from "@editorjs/editorjs"
@@ -26,10 +27,11 @@ type Action = {
     save: (note: Note) => Note
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
-    addTag: (note: Note, tag: string) => void
+    addNoteTag: (note: Note, tag: string) => void
     getNoteTag: (id: string) => Tag[]
 
     getTags: () => Tag[]
+    addTag: (tag: Tag) => void
 }
 
 const generateUUID = () => self.crypto.randomUUID()
@@ -41,6 +43,9 @@ const initialState: State = {
 export const useNotes = create<State & Action>()(
     persist(
         immer((set, get) => {
+            const tagExists = (id: string) =>
+                Boolean(get().tags.find((t) => t.id === id))
+
             return {
                 ...initialState,
                 clearData: () => {
@@ -91,6 +96,10 @@ export const useNotes = create<State & Action>()(
                         } else {
                             console.log("Save Note: ", { note })
 
+                            note.tags
+                                .filter((t) => !tagExists(t.id))
+                                .forEach((t) => get().addTag(t))
+
                             state.notes[note.id] = note
                         }
                     })
@@ -112,7 +121,7 @@ export const useNotes = create<State & Action>()(
                 },
 
                 // Tags
-                addTag: (note: Note, t) => {
+                addNoteTag: (note: Note, t) => {
                     set((state) => {
                         const { tags } = state
                         if (tags.find((tag) => tag.id === t)) return
@@ -137,10 +146,15 @@ export const useNotes = create<State & Action>()(
                     return note.tags
                 },
                 getTags: () => get().tags,
+                addTag: (tag) => {
+                    set((state) => {
+                        state.tags.push(tag)
+                    })
+                },
             }
         }),
         {
-            name: "react-animations",
+            name: `${APP_NAME}-notes`,
         },
     ),
 )
