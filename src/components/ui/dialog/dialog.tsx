@@ -73,19 +73,39 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
                                         }}
                                     >
                                         {closeBtn && (
-                                            <Dialog.Close asChild>
-                                                <Button
-                                                    style={{
-                                                        margin: "0 0 0 auto",
-                                                    }}
-                                                >
-                                                    <X color="white" />
-                                                </Button>
-                                            </Dialog.Close>
+                                            <section
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection:
+                                                        "row-reverse",
+                                                }}
+                                            >
+                                                <Dialog.Close asChild>
+                                                    <Button
+                                                        onClick={() =>
+                                                            onChange &&
+                                                            onChange(false)
+                                                        }
+                                                    >
+                                                        <X />
+                                                    </Button>
+                                                </Dialog.Close>
+                                            </section>
                                         )}
                                         {/* Content Below */}
 
-                                        <section>{children}</section>
+                                        <section
+                                            style={{
+                                                /** INFO: not just 100% because
+                                                 * the 100% height also includes
+                                                 * the shadow size at the bottom
+                                                 **/
+                                                height: "calc(100% - 30px)",
+                                                width: "100%",
+                                            }}
+                                        >
+                                            {children}
+                                        </section>
                                     </animated.div>
                                 </Dialog.Content>
                             </>
