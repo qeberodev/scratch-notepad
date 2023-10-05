@@ -1,10 +1,17 @@
-import { PropsWithChildren, ReactNode, useCallback, useMemo } from "react"
+import {
+    PropsWithChildren,
+    ReactNode,
+    useCallback,
+    useMemo,
+    useState,
+} from "react"
 import { container, block as blockStyle, blocksContainer } from "./note.css"
 import { Button } from "../ui/button/button"
 import { Maximize2, Trash2, Archive } from "react-feather"
 import type { Note } from "../../model/note"
 import { themeVars } from "../ui/styles.css"
 import { Tag } from "../tag/tag"
+import { Alert } from "../alert"
 
 type NoteAction = {
     icon: ReactNode
@@ -20,6 +27,7 @@ export type NoteProps = {
 }
 export function NoteCard(props: PropsWithChildren<NoteProps>) {
     const { note, onOpen, onDelete, onArchive } = props
+    const [deletePrompt, setDeletePrompt] = useState(false)
 
     const handleOpen = useCallback(() => {
         if (!note.id) {
@@ -42,8 +50,13 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
             return
         }
 
-        onDelete && onDelete(note.id)
-    }, [note, onDelete])
+        if (!deletePrompt) {
+            setDeletePrompt(true)
+        } else {
+            onDelete && onDelete(note.id)
+            setDeletePrompt(false)
+        }
+    }, [note, onDelete, deletePrompt])
 
     const handleArchive = useCallback(() => {
         if (!note.id) {
@@ -77,6 +90,44 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
 
     return (
         <div key={note.time} className={container}>
+            <Alert open={deletePrompt} onChange={setDeletePrompt}>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        height: "100%",
+                    }}
+                >
+                    <div>
+                        You are about to delete the selected note? Are you sure
+                        you want to delete the note?
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                            flexDirection: "row-reverse",
+                        }}
+                    >
+                        <Button onClick={() => setDeletePrompt(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            style={{
+                                color: "red",
+                            }}
+                            icon={<Trash2 />}
+                            onClick={handleDelete}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                </div>
+            </Alert>
+
             <div className={blocksContainer}>
                 {note.blocks.map((block) => (
                     <div
