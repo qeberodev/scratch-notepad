@@ -4,4 +4,5 @@ import { FONT } from "./components/ui/styles.css.ts"
 globalStyle("html, body", {
     margin: 0,
     fontFamily: FONT.sanSerif,
+    height: "100%",
 })
