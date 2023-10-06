@@ -21,7 +21,13 @@ import {
     useState,
 } from "react"
 import { tools } from "./editor-tools"
-import { container, dialog, tag, tagInput } from "./editor.css"
+import {
+    container,
+    dialog,
+    tag,
+    tagInput,
+    tagSectionContainer,
+} from "./editor.css"
 import { Button } from "../ui/button/button"
 import { X } from "react-feather"
 import { Tag, useNotes } from "../../model/note"
@@ -205,11 +211,10 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
     )
 
     useEffect(() => {
+        setTags([])
         if (selectedNote) {
             const note = get(selectedNote)
             if (note) setTags(note.tags)
-        } else {
-            setTags([])
         }
     }, [selectedNote])
 
@@ -251,14 +256,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                     flexDirection: "row",
                 }}
             >
-                <span
-                    style={{
-                        flex: 1,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
+                <span className={tagSectionContainer}>
                     <span
                         style={{
                             display: "inline-flex",

@@ -141,7 +141,14 @@ export function NoteCard(props: PropsWithChildren<NoteProps>) {
             </div>
 
             <div>
-                <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: 4,
+                        flexWrap: "wrap",
+                        marginTop: 4,
+                    }}
+                >
                     {note.tags &&
                         note.tags.map((tag) => <Tag key={tag.id} tag={tag} />)}
                 </div>

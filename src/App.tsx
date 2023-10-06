@@ -33,7 +33,7 @@ function App() {
     const { vars } = useTheme()
 
     const archivedCount = useMemo(() => {
-        return getNotes("archived").length
+        return getNotes({ tag: "archived" }).length
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notes, getNotes])
     const mainRef = useRef<HTMLDivElement>(null)
@@ -118,7 +118,10 @@ function App() {
                             }
                             onClick={() => setSidePanelOpen(true)}
                         />
-                        <ArchivedButton count={archivedCount} />
+                        <ArchivedButton
+                            onClick={() => filterBy("archived")}
+                            count={archivedCount}
+                        />
                         <SearchBar
                             value={entry}
                             onChange={(e) => setEntry(e.currentTarget.value)}

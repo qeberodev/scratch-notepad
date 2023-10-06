@@ -29,6 +29,7 @@ const tag = s({
     fontSize: "x-small",
     background: themeVars.background.tertiary,
     color: themeVars.color.secondary,
+    whiteSpace: "nowrap",
 })
 
 const tagInput = s({
@@ -38,4 +39,20 @@ const tagInput = s({
     fontSize: "x-small",
 })
 
-export { container, dialog, tag, tagInput }
+const tagSectionContainer = s({
+    flex: 1,
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    overflow: "auto",
+
+    // @ts-ignore does exist for IE scrollbar
+    "-ms-overflow-style": "none",
+    selectors: {
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
+    },
+})
+
+export { container, dialog, tag, tagInput, tagSectionContainer }

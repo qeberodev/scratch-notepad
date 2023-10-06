@@ -8,6 +8,14 @@ export const container = style({
     overflow: "auto",
     alignItems: "center",
     maxWidth: "30%",
+    scrollbarWidth: "none",
+    // @ts-ignore does exist for IE scrollbar
+    "-ms-overflow-style": "none",
+    selectors: {
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
+    },
 })
 
 export const tagOption = style({
@@ -16,6 +24,7 @@ export const tagOption = style({
     textTransform: "uppercase",
     userSelect: "none",
     fontSize: "9px",
+    whiteSpace: "nowrap",
 })
 export const selected = style({
     color: themeVars.color.tertiary,
