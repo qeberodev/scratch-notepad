@@ -12,18 +12,23 @@ import { Button } from "./components/ui/button/button"
 import { themeVars } from "./components/ui/styles.css"
 import { useTheme } from "./hooks/use-theme"
 import { useNotes } from "./model/note"
+import { TagSelectList } from "./components/tag-select-list"
+import { useTagFilter } from "./hooks/use-tag-filter"
 
 function App() {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [entry, setEntry] = useState("")
     const [selectedNote, setSelectedNote] = useState<string>()
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
-    const [notes, getNotes, deleteNote, archiveNote] = useNotes((state) => [
-        state.notes,
-        state.getNotes,
-        state.delete,
-        state.archive,
-    ])
+    const [notes, getNotes, deleteNote, archiveNote, tags] = useNotes(
+        (state) => [
+            state.notes,
+            state.getNotes,
+            state.delete,
+            state.archive,
+            state.tags,
+        ],
+    )
     const [settingsPage, setSettingsPage] = useState<Page>("home")
     const { vars } = useTheme()
 
@@ -49,6 +54,8 @@ function App() {
         archiveNote(id, true)
     }
 
+    const { filterBy, currentFilter } = useTagFilter()
+
     return (
         <div style={vars}>
             <main ref={mainRef} id="app-root-main" className={container}>
@@ -69,74 +76,59 @@ function App() {
                 <Editor
                     root={mainRef.current}
                     selectedNote={selectedNote}
+                    onSelectedNoteChange={setSelectedNote}
                     open={dialogOpen}
                     onChange={setDialogOpen}
                 />
 
-                <section>
-                    <div
+                <section
+                    style={{
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "8px",
+                    }}
+                >
+                    <Button
+                        onClick={createNote}
                         style={{
-                            position: "relative",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "8px",
+                            top: "60px",
                         }}
                     >
-                        <span
-                            style={{
-                                position: "absolute",
-                                left: 0,
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                            }}
-                        >
-                            <Button
-                                onClick={createNote}
-                                style={{
-                                    top: "60px",
-                                }}
-                            >
-                                <Plus color={themeVars.color.secondary} />
-                            </Button>
-                        </span>
+                        <Plus color={themeVars.color.secondary} />
+                    </Button>
 
-                        <span>Home</span>
+                    <TagSelectList
+                        selectedTag={currentFilter}
+                        onTagChange={filterBy}
+                        tags={tags}
+                    />
 
-                        <span
-                            style={{
-                                position: "absolute",
-                                right: 0,
-                                top: "50%",
-                                transform: "translateY(-50%)",
-
-                                display: "flex",
-                                flexDirection: "row-reverse",
-                                gap: "4px",
-                            }}
-                        >
-                            <Button
-                                icon={
-                                    <Settings
-                                        color={themeVars.color.secondary}
-                                    />
-                                }
-                                onClick={() => setSidePanelOpen(true)}
-                            />
-                            <ArchivedButton count={archivedCount} />
-                            <SearchBar
-                                value={entry}
-                                onChange={(e) =>
-                                    setEntry(e.currentTarget.value)
-                                }
-                                onClose={() => setEntry("")}
-                            />
-                        </span>
-                    </div>
+                    <span
+                        style={{
+                            display: "flex",
+                            flexDirection: "row-reverse",
+                            gap: "4px",
+                        }}
+                    >
+                        <Button
+                            icon={
+                                <Settings color={themeVars.color.secondary} />
+                            }
+                            onClick={() => setSidePanelOpen(true)}
+                        />
+                        <ArchivedButton count={archivedCount} />
+                        <SearchBar
+                            value={entry}
+                            onChange={(e) => setEntry(e.currentTarget.value)}
+                            onClose={() => setEntry("")}
+                        />
+                    </span>
                 </section>
 
                 <section className={noteList}>
-                    {getNotes("not-archived").map((note) => (
+                    {getNotes({ tag: currentFilter }).map((note) => (
                         <NoteCard
                             key={note.id}
                             note={note}

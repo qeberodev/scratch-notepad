@@ -1,7 +1,9 @@
-import { create } from "zustand"
-import { immer } from "zustand/middleware/immer"
+import { APP_NAME } from "@app/constants"
+import { FilterOptions, byOptions } from "@app/utils/filter-notes"
 import { OutputData } from "@editorjs/editorjs"
+import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { immer } from "zustand/middleware/immer"
 
 export class Tag {
     constructor(public id: string) {}
@@ -11,25 +13,30 @@ export interface Note extends OutputData {
     archived?: boolean
     tags: Tag[]
 }
-const _note_states = ["archived", "all", "not-archived"] as const
-type NoteState = (typeof _note_states)[number]
+
+const defaultTags = ["home", "archived"] as const
+export type DefaultTag = (typeof defaultTags)[number]
+export type AvailableTag = DefaultTag | (string & {})
 
 type State = {
-    notes: Record<string, Note>
     tags: Tag[]
+    currentFilter: DefaultTag | (string & {})
+    notes: Record<string, Note>
 }
 type Action = {
     clearData: () => void
 
-    getNotes: (filter?: NoteState) => Note[]
+    getNotes: (opts: FilterOptions) => Note[]
     get: (id: string) => Note | undefined
     save: (note: Note) => Note
     delete: (id: string) => void
     archive: (id: string, archive: boolean) => void
-    addTag: (note: Note, tag: string) => void
+    addNoteTag: (note: Note, tag: string) => void
     getNoteTag: (id: string) => Tag[]
 
     getTags: () => Tag[]
+    filterByTag: (tagId: string) => void
+    addTag: (tag: Tag) => void
 }
 
 const generateUUID = () => self.crypto.randomUUID()
@@ -37,10 +44,14 @@ const generateUUID = () => self.crypto.randomUUID()
 const initialState: State = {
     notes: {},
     tags: [],
+    currentFilter: "home",
 }
 export const useNotes = create<State & Action>()(
     persist(
         immer((set, get) => {
+            const tagExists = (id: string) =>
+                Boolean(get().tags.find((t) => t.id === id))
+
             return {
                 ...initialState,
                 clearData: () => {
@@ -50,29 +61,10 @@ export const useNotes = create<State & Action>()(
                     })
                 },
 
-                getNotes: (filter = "all") => {
+                getNotes: (opts = { tag: "home" }) => {
                     const notes = Object.values(get().notes)
 
-                    switch (filter) {
-                        case "archived": {
-                            const filtered = notes.filter(
-                                (note) => note.archived === true,
-                            )
-
-                            return filtered
-                        }
-                        case "not-archived": {
-                            const filtered = notes.filter(
-                                (note) => !note.archived,
-                            )
-
-                            return filtered
-                        }
-                        case "all":
-                        default: {
-                            return notes
-                        }
-                    }
+                    return byOptions(notes, opts)
                 },
 
                 get: (id: string) => {
@@ -83,13 +75,18 @@ export const useNotes = create<State & Action>()(
                         if (!note.id) {
                             note.id = generateUUID()
                         }
+
                         if (!note || !note.id) {
                             console.warn("Missing Note Details: ", {
                                 note,
                                 time: note.time,
                             })
                         } else {
-                            console.log("Save Note: ", { note })
+                            // Note Does Exist
+                            const { tags: newTags } = note
+                            newTags
+                                .filter((t) => !tagExists(t.id))
+                                .forEach((t) => state.tags.push(t))
 
                             state.notes[note.id] = note
                         }
@@ -112,7 +109,7 @@ export const useNotes = create<State & Action>()(
                 },
 
                 // Tags
-                addTag: (note: Note, t) => {
+                addNoteTag: (note: Note, t) => {
                     set((state) => {
                         const { tags } = state
                         if (tags.find((tag) => tag.id === t)) return
@@ -137,10 +134,28 @@ export const useNotes = create<State & Action>()(
                     return note.tags
                 },
                 getTags: () => get().tags,
+                addTag: (tag) => {
+                    set((state) => {
+                        state.tags.push(tag)
+                    })
+                },
+                filterByTag: (id) => {
+                    set((state) => {
+                        const tags = get().tags
+                        const found = tags.find((t) => t.id === id)
+                        const found_default = defaultTags.find((t) => t === id)
+
+                        if (found) {
+                            state.currentFilter = found.id
+                        } else if (found_default) {
+                            state.currentFilter = found_default
+                        }
+                    })
+                },
             }
         }),
         {
-            name: "react-animations",
+            name: `${APP_NAME}-notes`,
         },
     ),
 )

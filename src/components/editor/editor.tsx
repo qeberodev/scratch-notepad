@@ -30,6 +30,7 @@ import { useToolbarActions } from "./utils/toolbar"
 
 type EditorProps = DialogContainerProps & {
     selectedNote?: string
+    onSelectedNoteChange?: (id: string) => void
 }
 
 const defaultData: OutputData = {
@@ -46,8 +47,7 @@ const defaultData: OutputData = {
 
 const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
-    const { selectedNote: id, onChange, ...rest } = props
-    const [selectedNote, setSelectedNote] = useState(id)
+    const { selectedNote, onSelectedNoteChange, onChange, ...rest } = props
     const { save, get, notes, delete: _delete, archive } = useNotes()
     const editorContainerRef = useRef<HTMLDivElement>(null)
     const note = useMemo(() => {
@@ -58,6 +58,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
             }
         )
     }, [selectedNote, get])
+
     const [tags, setTags] = useState(note.tags)
     const notesAvailable = useMemo(
         () => Object.keys(notes).length !== 0,
@@ -128,7 +129,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                 archived: note.archived,
                 tags,
             })
-            setSelectedNote(saved.id)
+            onSelectedNoteChange && saved.id && onSelectedNoteChange(saved.id)
         } catch (err) {
             console.error("Error Saving Note: ", { err })
         }
@@ -165,6 +166,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         closeEditor,
         deleteNote,
         archiveNote,
+        selectedNote,
     })
 
     /**
@@ -201,6 +203,15 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
         },
         [tags, setTags],
     )
+
+    useEffect(() => {
+        if (selectedNote) {
+            const note = get(selectedNote)
+            if (note) setTags(note.tags)
+        } else {
+            setTags([])
+        }
+    }, [selectedNote])
 
     /**
      * @description Handles `note tags` keyboard actions. Current actions

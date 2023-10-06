@@ -1,6 +1,7 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
 import { immer } from "zustand/middleware/immer"
+import { persist } from "zustand/middleware"
+import { APP_NAME } from "@app/constants"
 
 const _themes = ["dark", "light"] as const
 export type Theme = (typeof _themes)[number]
@@ -27,7 +28,7 @@ export const useSettings = create(
             }
         }),
         {
-            name: "scratch-settings",
+            name: `${APP_NAME}-settings`,
         },
     ),
 )

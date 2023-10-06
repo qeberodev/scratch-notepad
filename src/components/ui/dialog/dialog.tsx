@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import * as Portal from "@radix-ui/react-portal"
 import { animated, useTransition } from "@react-spring/web"
 import clsx from "clsx"
-import { PropsWithChildren } from "react"
+import { PropsWithChildren, useEffect } from "react"
 import { X } from "react-feather"
 import { animationConfig } from "../../../animations"
 import { Button } from "../button/button"
@@ -12,13 +12,14 @@ import { content, overlay } from "./dialog.css"
 export type DialogContainerProps = {
     open?: boolean
     onChange?: (open: boolean) => void
+    onOpen?: () => void
     variant?: SizeVariant
     className?: string
     closeBtn?: boolean
     root?: HTMLElement | null
 }
 function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
-    const { onChange, open, children, className } = props
+    const { onChange, onOpen, open, children, className } = props
     const variant = props.variant ?? "large"
     const closeBtn = props.closeBtn ?? true
 
@@ -40,6 +41,10 @@ function DialogContainer(props: PropsWithChildren<DialogContainerProps>) {
         },
         config: animationConfig,
     })
+
+    useEffect(() => {
+        onOpen && onOpen()
+    }, [open])
 
     return (
         open && (
