@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useRef } from "react"
-import EditorJS, { OutputData } from "@editorjs/editorjs"
+import EditorJS, { OutputBlockData, OutputData } from "@editorjs/editorjs"
 import { tools } from "../components/editor/editor-tools"
+import { Note } from "@app/model/note"
 
 const EDITOR_HOLDER_ID = "editorjs"
-export function useEditor() {
+export function useEditor(props: { note?: Note; onSave?: (note: Note) => void }) {
+    const { note, onSave } = props
+
     const instance = useRef<EditorJS | null>(null)
     const initEditor = useCallback(() => {
         if (instance.current) return
 
-        const data: OutputData = {
-            blocks: [],
-        }
+        const data: OutputData & Note = note
+            ? note
+            : ({
+                  blocks: <OutputBlockData<string, any>[]>[],
+              } as Note)
 
         const editor = new EditorJS({
             data,
@@ -21,9 +26,12 @@ export function useEditor() {
             onReady: () => {
                 instance.current = editor
             },
+            onChange: async () => {
+                onSave?.(data)
+            },
             placeholder: "Start Typing Here 🖊️...",
         })
-    }, [instance])
+    }, [instance, note])
 
     // This will run only once
     useEffect(() => {
@@ -41,5 +49,6 @@ export function useEditor() {
 
     return {
         instance,
+        EDITOR_HOLDER_ID,
     }
 }

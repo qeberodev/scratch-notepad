@@ -31,7 +31,7 @@ function SearchInput(props: SearchInputProps) {
 }
 type RightToolbarProps = Pick<SearchInputProps, "value" | "onChange" | "onSearch"> & {
     archivedCount?: number
-    onSettingsOpen: () => void
+    onSettingsOpen?: () => void
 }
 function RightToolbar(props: RightToolbarProps) {
     const { onChange, onSearch, value, archivedCount, onSettingsOpen } = props

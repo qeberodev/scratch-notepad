@@ -11,23 +11,9 @@
  */
 import EditorJS, { OutputData } from "@editorjs/editorjs"
 import { DialogContainer, DialogContainerProps } from "../ui/dialog"
-import {
-    KeyboardEventHandler,
-    PropsWithChildren,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import { KeyboardEventHandler, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { tools } from "./editor-tools"
-import {
-    container,
-    dialog,
-    tag,
-    tagInput,
-    tagSectionContainer,
-} from "./editor.css"
+import { container, dialog, tag, tagInput, tagSectionContainer } from "./editor.css"
 import { Button } from "../ui/button/button"
 import { X } from "react-feather"
 import { Tag, useNotes } from "../../model/note"
@@ -66,10 +52,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
     }, [selectedNote, get])
 
     const [tags, setTags] = useState(note.tags)
-    const notesAvailable = useMemo(
-        () => Object.keys(notes).length !== 0,
-        [notes],
-    )
+    const notesAvailable = useMemo(() => Object.keys(notes).length !== 0, [notes])
 
     const initScheduled = useRef(false)
     const instance = useRef<EditorJS | null>(null)
@@ -283,9 +266,7 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                                     onClick={() => removeTag(t.id)}
                                     size={10}
                                     color={themeVars.color.secondary}
-                                    enableBackground={
-                                        themeVars.background.primary
-                                    }
+                                    enableBackground={themeVars.background.primary}
                                 />
                             </span>
                         ))}
@@ -302,23 +283,12 @@ export function Editor(props: PropsWithChildren<EditorProps>) {
                 {actionList.map(
                     ({ action, title, icon, component }) =>
                         component ?? (
-                            <Button
-                                key={title}
-                                style={{ margin: "0" }}
-                                title={title}
-                                onClick={action}
-                                icon={icon}
-                            />
+                            <Button key={title} style={{ margin: "0" }} title={title} onClick={action} icon={icon} />
                         ),
                 )}
             </div>
             {props.open && (
-                <div
-                    onKeyDown={handleKeyDown}
-                    ref={editorContainerRef}
-                    id={EDITOR_HOLDER_ID}
-                    className={container}
-                />
+                <div onKeyDown={handleKeyDown} ref={editorContainerRef} id={EDITOR_HOLDER_ID} className={container} />
             )}
         </DialogContainer>
     )
