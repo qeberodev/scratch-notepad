@@ -1,11 +1,13 @@
 import { ContainerOutlined, DeleteOutlined, ExportOutlined, InboxOutlined } from "@ant-design/icons"
-import { Tag as TagModel } from "@app/model/note"
+import { Note, Tag as TagModel } from "@app/model/note"
 import { Tag } from "@components/ui/tag"
 import { Tooltip } from "@components/ui/tooltip"
+import { OutputBlockData } from "@editorjs/editorjs"
 import { Button, Card, Divider, Flex, Popconfirm, Space } from "antd"
 import dayjs, { ConfigType } from "dayjs"
-import { PropsWithChildren, useMemo, useState } from "react"
+import { PropsWithChildren, useCallback, useMemo, useState, Fragment } from "react"
 import { container, dateDisplay } from "."
+import { Tool } from "@app/hooks/use-editor"
 
 export function DateDisplay(props: { date: ConfigType }) {
     const date = useMemo(() => dayjs(props.date), [props.date])
@@ -82,18 +84,70 @@ export function Actions(props: Partial<ActionProps>) {
     )
 }
 
+function NoteContent({ note }: Pick<Required<NoteCardProps>, "note">) {
+    const renderBlock = useCallback(
+        ({ type, data, id }: OutputBlockData<string, any>) => {
+            switch (type as Tool) {
+                case "header": {
+                    return (
+                        <h3 style={{ margin: 0 }} key={id}>
+                            {data.text}
+                        </h3>
+                    )
+                }
+                case "list": {
+                    const items = data.items as { content: string; items: any }[]
+                    const style = data.style as "ordered" | "unordered"
+                    if (style === "ordered") {
+                        return (
+                            <ul key={id}>
+                                {items.map((item) => (
+                                    <li>{item.content}</li>
+                                ))}
+                            </ul>
+                        )
+                    } else {
+                        return (
+                            <ol key={id}>
+                                {items
+                                    .filter((item) => item.content !== "")
+                                    .map((item) => (
+                                        <li>{item.content}</li>
+                                    ))}
+                            </ol>
+                        )
+                    }
+                }
+                // Default Tool in EditorJS
+                case "paragraph":
+                default: {
+                    return (
+                        <p style={{ padding: 0, margin: 0 }} key={id}>
+                            {data.text}
+                        </p>
+                    )
+                }
+            }
+        },
+        [note],
+    )
+
+    return <Fragment>{note.blocks.filter((_, idx) => idx < 2).map((b) => renderBlock(b))}</Fragment>
+}
+
 export type NoteCardProps = Partial<ActionProps> & {
     date: ConfigType
     tags?: TagModel[]
+    note?: Note
 }
 export function NoteCard(props: PropsWithChildren<NoteCardProps>) {
-    const { date, children, archived, tags, onArchive, onDelete, onOpen, onUndoArchive } = props
+    const { date, note, children, archived, tags, onArchive, onDelete, onOpen, onUndoArchive } = props
 
     return (
         <Card size="small" className={container}>
             <Flex vertical justify="space-between">
                 <Flex gap={"small"} vertical>
-                    {children}
+                    {note ? <NoteContent note={note} /> : children}
                 </Flex>
 
                 <Flex vertical gap={"small"} style={{ marginTop: "32px" }}>
@@ -108,7 +162,17 @@ export function NoteCard(props: PropsWithChildren<NoteCardProps>) {
 
                     {/* --- */}
                     <Divider style={{ margin: "0" }} dashed />
-                    <Flex wrap="nowrap" align="flex-end" justify="space-between">
+                    <Flex
+                        wrap="nowrap"
+                        align="flex-end"
+                        justify="space-between"
+                        onClick={(e) => {
+                            if (e.currentTarget === e.target) {
+                                onOpen && onOpen()
+                            }
+                        }}
+                        style={{ cursor: "pointer" }}
+                    >
                         <DateDisplay date={date} />
                         <Actions
                             archived={archived}
