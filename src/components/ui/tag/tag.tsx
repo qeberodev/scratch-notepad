@@ -5,14 +5,14 @@ import { useEffect } from "react"
 
 export type TagProps = Omit<_TagProps, "children"> & { tag: TagModel; clickable?: boolean }
 export function Tag(props: TagProps) {
-    const { tag, clickable, ...rest } = props
+    const { tag, clickable, title, ...rest } = props
 
     useEffect(() => {
         if (!clickable && rest.onClick) throw new Error("Tag is not clickable, but onClick is provided")
     }, [])
 
     return (
-        <_Tag data-clickable={clickable} className={container} {...rest}>
+        <_Tag title={title ?? `tag-${tag.id}`} data-clickable={clickable} className={container} {...rest}>
             {tag.id}
         </_Tag>
     )

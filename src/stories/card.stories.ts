@@ -4,7 +4,7 @@ import { NoteCard } from "@app/components/note-card"
 import { Tag } from "@app/model/note"
 
 const meta = {
-    title: "Scratch/NoteCard",
+    title: "Components/NoteCard",
     component: Card,
     tags: ["autodocs"],
     parameters: {

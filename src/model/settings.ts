@@ -7,9 +7,11 @@ const _themes = ["dark", "light"] as const
 export type Theme = (typeof _themes)[number]
 type State = {
     theme: Theme
+    sidepanelOpen: boolean
 }
 type Action = {
     setTheme: (theme: Theme) => void
+    setSidePanelOpen: (open: boolean) => void
 }
 
 export const useSettings = create(
@@ -20,9 +22,15 @@ export const useSettings = create(
 
             return {
                 theme,
+                sidepanelOpen: false,
                 setTheme: (t) => {
                     set((state) => {
                         state.theme = t
+                    })
+                },
+                setSidePanelOpen: (open) => {
+                    set((state) => {
+                        state.sidepanelOpen = open
                     })
                 },
             }

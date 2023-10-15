@@ -1,4 +1,4 @@
-import { ContainerOutlined, PlusCircleOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons"
+import { ContainerOutlined, MenuOutlined, PlusCircleOutlined, SearchOutlined } from "@ant-design/icons"
 import { Badge, Button, Flex, Input, Space } from "antd"
 import { ChangeEventHandler, KeyboardEventHandler, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { container } from "."
@@ -31,10 +31,10 @@ function SearchInput(props: SearchInputProps) {
 }
 type RightToolbarProps = Pick<SearchInputProps, "value" | "onChange" | "onSearch"> & {
     archivedCount?: number
-    onSettingsOpen: () => void
+    onSidepanelOpen?: () => void
 }
 function RightToolbar(props: RightToolbarProps) {
-    const { onChange, onSearch, value, archivedCount, onSettingsOpen } = props
+    const { onChange, onSearch, value, archivedCount, onSidepanelOpen: onSettingsOpen } = props
     const [showSearch, setShowSearch] = useState(false)
     const isEmpty = useCallback((val?: string): val is undefined => !val || val.length === 0, [value])
 
@@ -63,8 +63,8 @@ function RightToolbar(props: RightToolbarProps) {
                     }
                 />
             </Tooltip>
-            <Tooltip title="Open Settings" mouseEnterDelay={2}>
-                <Button type="text" icon={<SettingOutlined />} onClick={onSettingsOpen} />
+            <Tooltip title="Open Sidepanel" mouseEnterDelay={2}>
+                <Button type="text" icon={<MenuOutlined />} onClick={onSettingsOpen} />
             </Tooltip>
         </Space>
     )
@@ -84,14 +84,14 @@ function LeftToolbar(props: LeftToolbarProps) {
 }
 
 export type MainHeaderProps = Pick<SearchInputProps, "value" | "onChange" | "onSearch"> &
-    Pick<RightToolbarProps, "onSettingsOpen"> &
+    Pick<RightToolbarProps, "onSidepanelOpen"> &
     LeftToolbarProps & {
         tags?: TagModel[]
         onTagSelect?: (tag: TagModel) => void
         archivedCount?: number
     }
 export function MainHeader(props: PropsWithChildren<MainHeaderProps>) {
-    const { onChange, onSearch, value, onNew, tags, onTagSelect, onSettingsOpen } = props
+    const { onChange, onSearch, value, onNew, tags, onTagSelect, onSidepanelOpen: onSettingsOpen } = props
     const archivedCount = useMemo(() => props.archivedCount ?? 0, [props.archivedCount])
 
     return (
@@ -109,7 +109,7 @@ export function MainHeader(props: PropsWithChildren<MainHeaderProps>) {
                         tags.map((tag) => <Tag clickable onClick={() => onTagSelect?.(tag)} key={tag.id} tag={tag} />)}
                 </span>
                 <RightToolbar
-                    onSettingsOpen={onSettingsOpen}
+                    onSidepanelOpen={onSettingsOpen}
                     archivedCount={archivedCount}
                     onSearch={onSearch}
                     onChange={onChange}
