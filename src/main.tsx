@@ -5,7 +5,7 @@ import "./index.css"
 import "./style.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-import { Layout } from "@pages/main.tsx"
+import { Layout } from "@app/pages/layout"
 import { Home } from "@pages/home"
 import { Editor } from "@pages/editor"
 

@@ -1,16 +1,21 @@
 import { MainHeader } from "@app/components/main-header"
 import { NoteCard } from "@app/components/note-card"
-import { useNotes } from "@app/model/note"
+import { Tag, useNotes } from "@app/model/note"
 import { useSettings } from "@app/model/settings"
-import { Flex, theme } from "antd"
-import { Fragment, useCallback } from "react"
+import { Empty, Flex, theme } from "antd"
+import { Fragment, useCallback, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function Home() {
     const { setSidePanelOpen } = useSettings()
     const { token } = theme.useToken()
     const nav = useNavigate()
-    const { getNotes } = useNotes()
+    const { getNotes, deleteNote, archiveNote, notes } = useNotes()
+
+    // Derived Values
+    const archivedNotes = useMemo(() => getNotes({ tag: "archived" }).length, [notes])
+    const selectedNotes = useMemo(() => getNotes({ tag: "home" }), [notes])
+    const isEmpty = useMemo(() => selectedNotes.length === 0, [selectedNotes])
 
     // Handler Functions
     const goToEditor = useCallback(() => nav("note"), [])
@@ -18,7 +23,20 @@ export function Home() {
     return (
         <Fragment>
             <Flex vertical gap={"small"}>
-                <MainHeader onNew={goToEditor} onSidepanelOpen={() => setSidePanelOpen(true)} />
+                <MainHeader
+                    tags={[new Tag("Home"), new Tag("Archived")]}
+                    archivedCount={archivedNotes}
+                    onNew={goToEditor}
+                    onSidepanelOpen={() => setSidePanelOpen(true)}
+                />
+
+                {isEmpty && (
+                    <Empty
+                        style={{
+                            height: "100%",
+                        }}
+                    />
+                )}
 
                 <Flex
                     style={{ padding: token.padding }}
@@ -27,8 +45,14 @@ export function Home() {
                     wrap={"wrap"}
                     data-testid="notes-container"
                 >
-                    {getNotes({ tag: "home" }).map((note) => (
-                        <NoteCard key={note.id} date={Date.now()} note={note} />
+                    {selectedNotes.map((note) => (
+                        <NoteCard
+                            onDelete={() => note.id && deleteNote(note.id)}
+                            onArchive={() => note.id && archiveNote(note.id, true)}
+                            key={note.id}
+                            date={Date.now()}
+                            note={note}
+                        />
                     ))}
                 </Flex>
             </Flex>

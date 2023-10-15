@@ -144,7 +144,7 @@ export function NoteCard(props: PropsWithChildren<NoteCardProps>) {
     const { date, note, children, archived, tags, onArchive, onDelete, onOpen, onUndoArchive } = props
 
     return (
-        <Card size="small" className={container}>
+        <Card hoverable size="small" className={container}>
             <Flex vertical justify="space-between">
                 <Flex gap={"small"} vertical>
                     {note ? <NoteContent note={note} /> : children}

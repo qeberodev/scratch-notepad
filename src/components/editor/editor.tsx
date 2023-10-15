@@ -40,7 +40,7 @@ const defaultData: OutputData = {
 const EDITOR_HOLDER_ID = "editorjs"
 export function Editor(props: PropsWithChildren<EditorProps>) {
     const { selectedNote, onSelectedNoteChange, onChange, ...rest } = props
-    const { save, get, notes, delete: _delete, archive } = useNotes()
+    const { saveNote: save, get, notes, deleteNote: _delete, archiveNote: archive } = useNotes()
     const editorContainerRef = useRef<HTMLDivElement>(null)
     const note = useMemo(() => {
         return (
