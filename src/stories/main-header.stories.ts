@@ -4,7 +4,7 @@ import { StoryObj, Meta } from "@storybook/react"
 import { Tag } from "@app/model/note"
 
 const meta = {
-    title: "Scratch/Main Header",
+    title: "Components/Main Header",
     parameters: {
         layout: "fullscreen",
     },

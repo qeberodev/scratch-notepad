@@ -1,13 +1,7 @@
 import { Lock, XOctagon } from "react-feather"
 import { Button } from "../../../ui/button/button"
 import { themeVars } from "../../../ui/styles.css"
-import {
-    PropsWithChildren,
-    useCallback,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import { PropsWithChildren, useCallback, useMemo, useRef, useState } from "react"
 
 const CLEAR_TIMEOUT = 4 * 1000
 type PrivacyPageProps = {
@@ -39,8 +33,7 @@ export function Privacy(props: PropsWithChildren<PrivacyPageProps>) {
             onClearData && onClearData()
 
             isConfirm(false)
-            clearConfirmTimeout.current &&
-                clearTimeout(clearConfirmTimeout.current)
+            clearConfirmTimeout.current && clearTimeout(clearConfirmTimeout.current)
         } else {
             clearConfirmTimeout.current = setTimeout(() => {
                 isConfirm(false)
@@ -61,21 +54,18 @@ export function Privacy(props: PropsWithChildren<PrivacyPageProps>) {
                 </h3>
 
                 <span>
-                    We respect your right to privacy and give you the ability to
-                    control your data. Our Data Clear functionality allows you
-                    to:
+                    We respect your right to privacy and give you the ability to control your data. Our Data Clear
+                    functionality allows you to:
                 </span>
                 <ul>
                     <li>
-                        <b>Clear Personal Data: </b> Remove all personal data,
-                        including profile information, preferences, and account
-                        settings.
+                        <b>Clear Personal Data: </b> Remove all personal data, including profile information,
+                        preferences, and account settings.
                     </li>
 
                     <li>
-                        <b>Delete User Content:</b> Erase all user-generated
-                        content such as notes, scratch boards, and uploaded
-                        files.
+                        <b>Delete User Content:</b> Erase all user-generated content such as notes, scratch boards, and
+                        uploaded files.
                     </li>
                 </ul>
                 <Button

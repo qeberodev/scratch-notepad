@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react"
 import { EditorHeader } from "./editor-header"
 
 const meta = {
-    title: "Scratch/EditorHeader",
+    title: "Components/EditorHeader",
     component: EditorHeader,
     parameters: {
         layout: "fullscreen",
