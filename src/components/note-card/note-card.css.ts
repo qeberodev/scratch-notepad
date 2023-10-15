@@ -2,7 +2,7 @@ import { style } from "@vanilla-extract/css"
 import { gray } from "@ant-design/colors"
 
 export const container = style({
-    width: 360,
+    width: 300,
 })
 
 export const dateDisplay = style({

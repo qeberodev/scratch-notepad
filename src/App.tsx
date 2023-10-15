@@ -20,15 +20,13 @@ function App() {
     const [entry, setEntry] = useState("")
     const [selectedNote, setSelectedNote] = useState<string>()
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
-    const [notes, getNotes, deleteNote, archiveNote, tags] = useNotes(
-        (state) => [
-            state.notes,
-            state.getNotes,
-            state.delete,
-            state.archive,
-            state.tags,
-        ],
-    )
+    const [notes, getNotes, deleteNote, archiveNote, tags] = useNotes((state) => [
+        state.notes,
+        state.getNotes,
+        state.deleteNote,
+        state.archiveNote,
+        state.tags,
+    ])
     const [settingsPage, setSettingsPage] = useState<Page>("home")
     const { vars } = useTheme()
 
@@ -67,10 +65,7 @@ function App() {
                         setSettingsPage("home")
                     }}
                 >
-                    <SettingsPanel
-                        page={settingsPage}
-                        onChange={(page) => setSettingsPage(page)}
-                    />
+                    <SettingsPanel page={settingsPage} onChange={(page) => setSettingsPage(page)} />
                 </SidePanel>
 
                 <Editor
@@ -99,11 +94,7 @@ function App() {
                         <Plus color={themeVars.color.secondary} />
                     </Button>
 
-                    <TagSelectList
-                        selectedTag={currentFilter}
-                        onTagChange={filterBy}
-                        tags={tags}
-                    />
+                    <TagSelectList selectedTag={currentFilter} onTagChange={filterBy} tags={tags} />
 
                     <span
                         style={{
@@ -113,15 +104,10 @@ function App() {
                         }}
                     >
                         <Button
-                            icon={
-                                <Settings color={themeVars.color.secondary} />
-                            }
+                            icon={<Settings color={themeVars.color.secondary} />}
                             onClick={() => setSidePanelOpen(true)}
                         />
-                        <ArchivedButton
-                            onClick={() => filterBy("archived")}
-                            count={archivedCount}
-                        />
+                        <ArchivedButton onClick={() => filterBy("archived")} count={archivedCount} />
                         <SearchBar
                             value={entry}
                             onChange={(e) => setEntry(e.currentTarget.value)}

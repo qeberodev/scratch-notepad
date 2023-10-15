@@ -28,9 +28,9 @@ type Action = {
 
     getNotes: (opts: FilterOptions) => Note[]
     get: (id: string) => Note | undefined
-    save: (note: Note) => Note
-    delete: (id: string) => void
-    archive: (id: string, archive: boolean) => void
+    saveNote: (note: Note) => Note
+    deleteNote: (id: string) => void
+    archiveNote: (id: string, archive: boolean) => void
     addNoteTag: (note: Note, tag: string) => void
     getNoteTag: (id: string) => Tag[]
 
@@ -49,8 +49,7 @@ const initialState: State = {
 export const useNotes = create<State & Action>()(
     persist(
         immer((set, get) => {
-            const tagExists = (id: string) =>
-                Boolean(get().tags.find((t) => t.id === id))
+            const tagExists = (id: string) => Boolean(get().tags.find((t) => t.id === id))
 
             return {
                 ...initialState,
@@ -70,7 +69,7 @@ export const useNotes = create<State & Action>()(
                 get: (id: string) => {
                     return get().notes[id]
                 },
-                save: (note) => {
+                saveNote: (note) => {
                     set((state) => {
                         if (!note.id) {
                             note.id = generateUUID()
@@ -84,9 +83,7 @@ export const useNotes = create<State & Action>()(
                         } else {
                             // Note Does Exist
                             const { tags: newTags } = note
-                            newTags
-                                .filter((t) => !tagExists(t.id))
-                                .forEach((t) => state.tags.push(t))
+                            newTags.filter((t) => !tagExists(t.id)).forEach((t) => state.tags.push(t))
 
                             state.notes[note.id] = note
                         }
@@ -94,7 +91,7 @@ export const useNotes = create<State & Action>()(
 
                     return note
                 },
-                archive: (id, archive) => {
+                archiveNote: (id, archive) => {
                     set((state) => {
                         const note = state.notes[id]
 
@@ -102,7 +99,7 @@ export const useNotes = create<State & Action>()(
                         note.archived = archive
                     })
                 },
-                delete: (id: string) => {
+                deleteNote: (id: string) => {
                     set((state) => {
                         delete state.notes[id]
                     })
@@ -121,8 +118,7 @@ export const useNotes = create<State & Action>()(
                         if (!id) throw Error("Note doesn't exist")
                         const savedNote = get().notes[id]
 
-                        if (!savedNote)
-                            throw new Error("Note instance doesn't exist")
+                        if (!savedNote) throw new Error("Note instance doesn't exist")
 
                         state.notes[id] = { ...note, tags: [...tags, newTag] }
                     })
