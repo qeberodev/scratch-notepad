@@ -144,7 +144,16 @@ export function NoteCard(props: PropsWithChildren<NoteCardProps>) {
     const { date, note, children, archived, tags, onArchive, onDelete, onOpen, onUndoArchive } = props
 
     return (
-        <Card hoverable size="small" className={container}>
+        <Card
+            hoverable
+            onClick={(e) => {
+                if (e.currentTarget === e.target) {
+                    onOpen && onOpen()
+                }
+            }}
+            size="small"
+            className={container}
+        >
             <Flex vertical justify="space-between">
                 <Flex gap={"small"} vertical>
                     {note ? <NoteContent note={note} /> : children}
@@ -162,17 +171,7 @@ export function NoteCard(props: PropsWithChildren<NoteCardProps>) {
 
                     {/* --- */}
                     <Divider style={{ margin: "0" }} dashed />
-                    <Flex
-                        wrap="nowrap"
-                        align="flex-end"
-                        justify="space-between"
-                        onClick={(e) => {
-                            if (e.currentTarget === e.target) {
-                                onOpen && onOpen()
-                            }
-                        }}
-                        style={{ cursor: "pointer" }}
-                    >
+                    <Flex wrap="nowrap" align="flex-end" justify="space-between" style={{ cursor: "pointer" }}>
                         <DateDisplay date={date} />
                         <Actions
                             archived={archived}
