@@ -2,7 +2,7 @@ import { Theme } from "@app/model/settings"
 import { Button, Drawer, DrawerProps, Flex, Popconfirm, Space, theme as _theme } from "antd"
 import { useState } from "react"
 import { container } from "."
-import { InfoCircleFilled, LeftCircleOutlined } from "@ant-design/icons"
+import { CloseOutlined, InfoCircleFilled, LeftCircleOutlined } from "@ant-design/icons"
 import { red } from "@ant-design/colors"
 
 const pages = ["privacy", "general", "about"] as const
@@ -128,6 +128,9 @@ export function SidePanel(props: SidePanelProps) {
                 </Flex>
             }
         >
+            <Flex justify="space-between" style={{ flexDirection: "row-reverse", marginBottom: token.margin }}>
+                <Button icon={<CloseOutlined />} type="text" onClick={props.onClose} size="small" />
+            </Flex>
             <Flex vertical gap={"small"}>
                 <Button size="large" style={{ textAlign: "left" }} block onClick={() => setActivePage("general")}>
                     General

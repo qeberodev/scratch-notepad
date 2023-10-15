@@ -8,21 +8,26 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { Home } from "./pages/main.tsx"
 import { Editor } from "./pages/editor"
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            Component: Home,
+            children: [],
+        },
+        {
+            path: "/note/new",
+            Component: Editor,
+        },
+        {
+            path: "/app",
+            Component: App,
+        },
+    ],
     {
-        path: "/",
-        Component: Home,
-        children: [],
+        basename: "/",
     },
-    {
-        path: "/note/new",
-        Component: Editor,
-    },
-    {
-        path: "/app",
-        Component: App,
-    },
-])
+)
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>

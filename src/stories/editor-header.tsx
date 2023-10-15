@@ -9,7 +9,7 @@ export function EditorHeader(props: EditorHeaderProps) {
             {...props}
             onArchive={() => console.log("Archiving Note")}
             onDelete={() => console.log("Deleting Note")}
-            onOpenSettings={() => console.log("Opening Settings")}
+            onSidepanelOpen={() => console.log("Opening Settings")}
             setTags={setTags}
             tags={tags}
         />
