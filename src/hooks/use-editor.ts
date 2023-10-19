@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react"
+import { RefObject, useCallback, useEffect, useRef } from "react"
 import EditorJS, { OutputBlockData, OutputData } from "@editorjs/editorjs"
 import { Note } from "@app/model/note"
 
@@ -22,9 +22,8 @@ export const toolsConfig: EditorConfig["tools"] = {
     },
 } as const
 
-const EDITOR_HOLDER_ID = "editorjs"
-export function useEditor(props: { note?: Note; onSave?: (note: Note) => void }) {
-    const { note, onSave } = props
+export function useEditor(props: { note?: Note; onSave?: (note: Note) => void; ref: RefObject<HTMLDivElement> }) {
+    const { note, ref, onSave } = props
 
     /**
      * Will run only once, this is to prevent the editor from being initialized multiple times.
@@ -34,6 +33,7 @@ export function useEditor(props: { note?: Note; onSave?: (note: Note) => void })
     const instance = useRef<EditorJS | null>(null)
     const initEditor = useCallback(() => {
         if (instance.current) return
+        if (!ref.current) return
 
         const data: OutputData & Note = note
             ? note
@@ -43,15 +43,17 @@ export function useEditor(props: { note?: Note; onSave?: (note: Note) => void })
 
         const editor = new EditorJS({
             data,
-            holder: EDITOR_HOLDER_ID,
+            holder: ref.current,
             autofocus: false,
             hideToolbar: false,
             tools: toolsConfig,
             onReady: () => {
                 instance.current = editor
             },
-            onChange: async () => {
-                onSave?.(data)
+            onChange: async (api) => {
+                const noteData = await api.saver.save()
+
+                onSave?.(noteData as Note)
             },
             placeholder: "Start Typing Here 🖊️...",
         })
@@ -75,6 +77,5 @@ export function useEditor(props: { note?: Note; onSave?: (note: Note) => void })
 
     return {
         instance,
-        EDITOR_HOLDER_ID,
     }
 }

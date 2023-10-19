@@ -23,6 +23,10 @@ const router = createBrowserRouter(
                     path: "/note",
                     Component: Editor,
                 },
+                {
+                    path: "/note/:id",
+                    Component: Editor,
+                },
             ],
         },
         {

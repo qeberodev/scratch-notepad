@@ -27,7 +27,7 @@ type Action = {
     clearData: () => void
 
     getNotes: (opts: FilterOptions) => Note[]
-    get: (id: string) => Note | undefined
+    getNote: (id: string) => Note | undefined
     saveNote: (note: Note) => Note
     deleteNote: (id: string) => void
     archiveNote: (id: string, archive: boolean) => void
@@ -66,14 +66,14 @@ export const useNotes = create<State & Action>()(
                     return byOptions(notes, opts)
                 },
 
-                get: (id: string) => {
+                getNote: (id: string) => {
                     return get().notes[id]
                 },
                 saveNote: (note) => {
                     set((state) => {
-                        if (!note.id) {
-                            note.id = generateUUID()
-                        }
+                        !note.id && (note.id = generateUUID())
+                        !note.tags && (note.tags = [])
+                        !note.archived && (note.archived = false)
 
                         if (!note || !note.id) {
                             console.warn("Missing Note Details: ", {

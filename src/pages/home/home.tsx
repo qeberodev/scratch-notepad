@@ -49,6 +49,7 @@ export function Home() {
                         <NoteCard
                             onDelete={() => note.id && deleteNote(note.id)}
                             onArchive={() => note.id && archiveNote(note.id, true)}
+                            onOpen={() => nav(`note/${note.id}`)}
                             key={note.id}
                             date={Date.now()}
                             note={note}
